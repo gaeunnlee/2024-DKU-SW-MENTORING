@@ -23,9 +23,9 @@ export default function Post({ data }: { data: IPost }) {
       <Container>
          <div className="flex items-center gap-1">
             <HiUserCircle style={{ fontSize: '40px', color: '#ddd' }} />
-            <div className="flex flex-col gap-1">
-               <p>{data.author}</p>
-               <p>{missionName}</p>
+            <div className="flex flex-col">
+               <p className="leading-0 text-[0.9rem]">{data.author}</p>
+               <p className="leading-0 text-sm text-slate-800">{missionName}</p>
             </div>
          </div>
          <div>

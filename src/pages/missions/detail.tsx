@@ -59,7 +59,7 @@ const ListItem = ({
    bonusMission?: IBonusMission[];
 }) => (
    <li
-      className={`flex w-full px-5 gap-3 ${name === '보너스 미션' ? 'items-start' : 'items-center'}`}
+      className={`flex w-full px-5 gap-6 ${name === '보너스 미션' ? 'items-start' : 'items-center'}`}
    >
       {icon}
       <div className="flex flex-col gap-[6px] text-[13px]">
