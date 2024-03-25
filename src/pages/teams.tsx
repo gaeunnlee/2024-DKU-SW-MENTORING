@@ -41,9 +41,6 @@ const Mission = styled.div`
    width: 100%;
    gap: 10px;
    align-items: center;
-   &:hover p {
-      font-weight: bold;
-   }
 `;
 
 const Number = styled.span`
