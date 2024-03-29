@@ -5,17 +5,20 @@ import { INotice } from '../../data/interface';
 import Layout from '../../components/Layout';
 import { MdOutlineDateRange } from 'react-icons/md';
 import styled from 'styled-components';
-import { AiOutlineNotification } from 'react-icons/ai';
 import { FaRegComment } from 'react-icons/fa';
 import Comment from '../../components/Comment';
+import { useNavStore } from '../../stores/nav-stores';
 
 export default function NoticeDetail() {
    const { pathname } = useLocation();
    const [noticeId, setNoticeId] = useState('');
    const [content, setContent] = useState<INotice>();
    const { get } = useApi();
+   const { setIsPreviousVisible } = useNavStore();
+
    useEffect(() => {
       setNoticeId(pathname.split('/notice/')[1]);
+      setIsPreviousVisible(true);
    }, []);
    useLayoutEffect(() => {
       get({ api: `/notice/${noticeId}`, auth: true }).then((response) => {

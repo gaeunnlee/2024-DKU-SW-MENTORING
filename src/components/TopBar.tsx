@@ -1,26 +1,33 @@
-import React, { useRef } from 'react';
+import React from 'react';
 import styled from 'styled-components';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { route } from '../data/route';
 import { useEffect, useState } from 'react';
 import { useNavStore } from '../stores/nav-stores';
 import LogoImage from '../assets/images/logo.png';
+import { IoChevronBack } from 'react-icons/io5';
 
 export default function TopBar() {
    const { pathname } = useLocation();
    const [title, setTitle] = useState('');
-   const { isNavVisible, setIsNavVisible } = useNavStore();
+   const { isNavVisible, setIsNavVisible, isPreviousVisible, setIsPreviousVisible } = useNavStore();
+   const navigate = useNavigate();
 
    useEffect(() => {
-      setTitle(
-         Object.getOwnPropertyDescriptor(route, pathname.split('/')[1])?.value
-            .id ?? ''
-      );
+      setTitle(Object.getOwnPropertyDescriptor(route, pathname.split('/')[1])?.value.id ?? '');
       setIsNavVisible(true);
+      setIsPreviousVisible(false);
    }, [pathname]);
 
    return (
       <Container className={`${!isNavVisible && 'hidden'}`}>
+         {isPreviousVisible && (
+            <IoChevronBack
+               onClick={() => {
+                  navigate(-1);
+               }}
+            />
+         )}
          {pathname === '/' ? <Logo src={LogoImage} /> : <>{title}</>}
       </Container>
    );
@@ -42,6 +49,12 @@ const Container = styled.nav`
       height: 0;
       opacity: 0;
       transition: 0.2s;
+   }
+   svg {
+      font-size: 1.5rem;
+      position: absolute;
+      left: 1.25rem;
+      cursor: pointer;
    }
 `;
 
