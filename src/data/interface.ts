@@ -86,6 +86,7 @@ export interface IUserInfo {
    studentId: string;
    teamName: string;
    username: string;
+   role: string;
 }
 
 export interface INoticeBoard extends IBoard {
