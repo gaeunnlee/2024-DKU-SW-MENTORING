@@ -5,6 +5,7 @@ import { FaRegComment } from 'react-icons/fa';
 import { MdOutlineDateRange } from 'react-icons/md';
 import { AiOutlineNotification } from 'react-icons/ai';
 import { useApi } from '../../hooks/useApi';
+import { useNavigate } from 'react-router-dom';
 
 export default function NoticePost({
    data: { id, title, author, body, images, files, commentCount },
@@ -13,6 +14,7 @@ export default function NoticePost({
 }) {
    const [detail, setDetail] = useState<INoticeDetail>();
    const { get } = useApi();
+   const navigate = useNavigate();
 
    const fetchPost = (id: number) => {
       get({ api: `/notice/${id}`, auth: true }).then(
@@ -24,7 +26,7 @@ export default function NoticePost({
    return (
       <Container
          onClick={() => {
-            fetchPost(id);
+            navigate(`/notice/${id}`);
          }}
       >
          <div className="flex flex-col gap-[0.3rem]">
