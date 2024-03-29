@@ -4,18 +4,23 @@ import Box from '../../components/ui/Box';
 import Text from '../../components/ui/Text';
 import { useAuth } from '../../hooks/useAuth';
 import { useApi } from '../../hooks/useApi';
-import { IUserInfo } from '../../data/interface';
+import { IMyTeam, IUserInfo } from '../../data/interface';
 import { FaUserCircle } from 'react-icons/fa';
 import Menu from './Menu';
+import TeamInfo from './TeamInfo';
 
 export default function MyPage() {
-   const { isLoggedIn, logout } = useAuth();
+   const { isLoggedIn } = useAuth();
    const { get } = useApi();
    const [userInfo, setUserInfo] = useState<IUserInfo>();
+   const [teamInfo, setTeamInfo] = useState<IMyTeam>();
 
    useEffect(() => {
       get({ api: '/user', auth: true }).then(function (data: IUserInfo) {
          setUserInfo(data);
+      });
+      get({ api: '/team/my', auth: true }).then(function (response: IMyTeam) {
+         setTeamInfo(response);
       });
    }, []);
 
@@ -41,6 +46,8 @@ export default function MyPage() {
                      </div>
                   </div>
                </div>
+               <hr />
+               <TeamInfo data={teamInfo} />
                <hr />
                <Menu />
             </>

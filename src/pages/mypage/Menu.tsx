@@ -2,7 +2,6 @@ import React from 'react';
 import styled from 'styled-components';
 import { useModal } from '../../hooks/useModal';
 import { FaPowerOff, FaRankingStar } from 'react-icons/fa6';
-import { MdInsertPhoto } from 'react-icons/md';
 import { FaKey, FaUserFriends } from 'react-icons/fa';
 import { AiFillEdit } from 'react-icons/ai';
 import { MdFeedback, MdLaptopChromebook } from 'react-icons/md';
@@ -15,13 +14,6 @@ export default function Menu() {
    const navigate = useNavigate();
 
    const mypageMenu = [
-      {
-         icon: MdInsertPhoto,
-         name: '작성글',
-         onClick: () => {
-            navigate('/my-posts');
-         },
-      },
       {
          icon: FaUserFriends,
          name: '팀 목록',

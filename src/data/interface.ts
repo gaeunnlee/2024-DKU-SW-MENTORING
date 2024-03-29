@@ -116,3 +116,10 @@ export interface IComment {
    author: string;
    content: string;
 }
+
+export interface IMyTeam {
+   teamName: string;
+   score: number;
+   mentor: string;
+   members: string[];
+}
