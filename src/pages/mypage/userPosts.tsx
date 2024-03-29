@@ -12,21 +12,20 @@ export default function UserPosts() {
    const navigate = useNavigate();
    useEffect(() => {
       get({
-         api: '/post/mission-board/my?page=0&size=20&bodySize=10',
+         api: '/post/mission-board/my?page=0&size=20&bodySize=10&sort=id,desc',
          auth: true,
       }).then((response: IPostBoard) => {
          setUserPosts(response.content);
-         console.log(response.content);
       });
    }, []);
    return (
-      <Masonry columnsCount={3} gutter="0.5rem">
+      <Masonry columnsCount={2} gutter="0.5rem">
          {userPosts?.map((item) => {
             return (
                <PostItem
                   key={item.images[0].id}
                   onClick={() => {
-                     navigate(`/post/${item.id}`);
+                     navigate(`/post-detail/${item.id}`);
                   }}
                >
                   <img className="w-full rounded-lg" src={item.images[0].url} />
@@ -37,8 +36,6 @@ export default function UserPosts() {
    );
 }
 
-const UserPostContainer = styled.div`
-   display: grid;
-   grid-template-columns: repeat(3, 1fr);
+const PostItem = styled.div`
+   cursor: pointer;
 `;
-const PostItem = styled.div``;

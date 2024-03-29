@@ -18,7 +18,9 @@ export default function Menu() {
       {
          icon: MdInsertPhoto,
          name: '작성글',
-         onClick: undefined,
+         onClick: () => {
+            navigate('/my-posts');
+         },
       },
       {
          icon: FaUserFriends,
@@ -67,9 +69,7 @@ export default function Menu() {
             <Button
                key={item.name}
                onClick={() => {
-                  item.onClick !== undefined
-                     ? item.onClick()
-                     : open({ type: 'error', content: <>🚧 개발 중 🚧</> });
+                  item.onClick !== undefined ? item.onClick() : open({ type: 'error', content: <>🚧 개발 중 🚧</> });
                }}
             >
                <Icon>

@@ -45,9 +45,14 @@ export const route = {
       name: '공지상세',
       pathname: '/notice/:id',
    },
-   postDetail: {
+   'post-detail': {
       id: '상세',
       name: '상세',
-      pathname: '/post/:id',
+      pathname: '/post-detail/:id',
+   },
+   'my-posts': {
+      id: '작성글',
+      name: '작성글',
+      pathname: '/my-posts',
    },
 };
