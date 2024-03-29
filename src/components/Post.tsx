@@ -10,7 +10,8 @@ import Comment from './Comment';
 import { useRoleStore } from '../stores/role-stores';
 import { useAuth } from '../hooks/useAuth';
 import { useApi } from '../hooks/useApi';
-import { ButtonNameByMissionStatus } from '../data/missionStatus';
+import { ButtonNameByMissionStatus, TagInfoByMissionStatus } from '../data/missionStatus';
+import { TMissionStatus } from '../data/type';
 
 const Container = styled.div`
    display: flex;
@@ -73,6 +74,12 @@ export default function Post({ data }: { data: IPost }) {
       }
    };
 
+   const MissionStatusTag = ({ status }: { status: TMissionStatus }) => (
+      <span className={`py-[0.1rem] px-[0.4rem] rounded-md text-sm ${TagInfoByMissionStatus[status].color}`}>
+         {TagInfoByMissionStatus[status].name}
+      </span>
+   );
+
    return (
       <Container>
          <div className="flex items-center justify-between w-full">
@@ -80,7 +87,11 @@ export default function Post({ data }: { data: IPost }) {
                <HiUserCircle style={{ fontSize: '40px', color: '#ddd' }} />
                <div className="flex flex-col">
                   <p className="leading-0 text-[0.9rem]">{data.author}</p>
-                  <p className="leading-0 text-sm text-slate-800">{missionName}</p>
+
+                  <p className="leading-0 text-slate-800 flex gap-1 items-center">
+                     {missionName}
+                     <MissionStatusTag status={data.registerStatus} />
+                  </p>
                </div>
             </div>
             {isAdmin && (
@@ -102,7 +113,7 @@ export default function Post({ data }: { data: IPost }) {
          </div>
          <div className="flex flex-col gap-1 mt-5 ml-2">
             <div className="flex gap-2">
-               <span className="text-blue-700">#{data.title}</span>
+               <span className="text-blue-700">#{data.title}</span>{' '}
             </div>
             <p>{data.body}</p>
             <div
