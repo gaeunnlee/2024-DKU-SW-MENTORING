@@ -12,13 +12,7 @@ import HorizontalScrollBox from '../../components/HorizontalScrollBox';
 import { SwiperSlide } from 'swiper/react';
 import { useLayoutScrollStore } from '../../stores/layout-scroll-stores';
 
-export default function Missions({
-   searchMode,
-   passMissionId,
-}: {
-   searchMode?: boolean;
-   passMissionId?: (id: number) => void;
-}) {
+export default function Missions({ searchMode, passMissionId }: { searchMode?: boolean; passMissionId?: (id: number) => void }) {
    const [missions, setMissions] = useState<IMission[]>();
    const [filteredDifficulty, setFilteredDifficulty] = useState('');
    const [hasBonusMission, setHasBonusMission] = useState<boolean>();
@@ -27,13 +21,7 @@ export default function Missions({
 
    const { setIsScrollTop } = useLayoutScrollStore();
 
-   const fetchMissions = ({
-      difficulty,
-      hasBonusMission,
-   }: {
-      difficulty?: string;
-      hasBonusMission?: boolean;
-   }) => {
+   const fetchMissions = ({ difficulty, hasBonusMission }: { difficulty?: string; hasBonusMission?: boolean }) => {
       get({
          api: `/mission?page=0&size=200${hasBonusMission ? `&hasBonusMission=${hasBonusMission}` : ''}${difficulty ? `&difficulty=${filteredDifficulty}` : ''}`,
       }).then(function (data: IMissionBoard) {
@@ -91,7 +79,7 @@ export default function Missions({
    }, [hasBonusMission, filteredDifficulty]);
 
    return (
-      <Layout className="w-full" style={{ padding: 0 }}>
+      <Layout className="w-full overscroll" style={{ padding: 0, height: 'calc(100dvh - 60px)' }}>
          <FilterContainer className="flex gap-2 sticky top-0 bg-white p-3">
             <label className=" cursor-pointer bg-zinc-100 px-3 py-1 text-zinc-500 rounded-full flex whitespace-nowrap">
                <input
@@ -118,7 +106,7 @@ export default function Missions({
                ))}
             </HorizontalScrollBox>
          </FilterContainer>
-         <div className="h-[80dvh] px-3">
+         <div className="h-[80dvh] px-3 pb-[60px] mb-[30px]">
             {missions?.map((item) => (
                <Box
                   onClick={() => {
@@ -138,18 +126,9 @@ export default function Missions({
                      <div className="flex flex-col gap-1">
                         <MissionName>{item.name}</MissionName>
                         <MissionInfo>
-                           <Difficulty>
-                              {
-                                 Object.getOwnPropertyDescriptor(
-                                    difficulty,
-                                    item.difficulty
-                                 )?.value
-                              }
-                           </Difficulty>
+                           <Difficulty>{Object.getOwnPropertyDescriptor(difficulty, item.difficulty)?.value}</Difficulty>
                            <span>{item.point}점</span>
-                           {item.bonusMission.length > 0 && (
-                              <span>보너스 미션 ♥️</span>
-                           )}
+                           {item.bonusMission.length > 0 && <span>보너스 미션 ♥️</span>}
                         </MissionInfo>
                      </div>
                   </Mission>

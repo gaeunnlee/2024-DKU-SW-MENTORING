@@ -4,8 +4,7 @@
 
 @font-face {
    font-family: 'Pretendard-Regular';
-   src: url('https://cdn.jsdelivr.net/gh/Project-Noonnu/noonfonts_2107@1.1/Pretendard-Regular.woff')
-      format('woff');
+   src: url('https://cdn.jsdelivr.net/gh/Project-Noonnu/noonfonts_2107@1.1/Pretendard-Regular.woff') format('woff');
    font-weight: 400;
    font-style: normal;
 }
@@ -31,6 +30,11 @@ div[aria-modal='true'] {
    justify-self: center;
    max-width: 480px;
    width: 100%;
+   overscroll-behavior: none;
+}
+
+/* 스크롤 바운딩 */
+.overscroll {
    overscroll-behavior: none;
 }
 

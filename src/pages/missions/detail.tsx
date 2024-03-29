@@ -11,8 +11,7 @@ export default function MissionDetail({ data }: { data: IMission }) {
    const detailList = [
       {
          name: '난이도',
-         value: Object.getOwnPropertyDescriptor(difficulty, data.difficulty)
-            ?.value,
+         value: Object.getOwnPropertyDescriptor(difficulty, data.difficulty)?.value,
          icon: <PiShootingStar style={{ fontSize: '25px' }} />,
       },
       {
@@ -34,33 +33,15 @@ export default function MissionDetail({ data }: { data: IMission }) {
          <hr style={{ border: '1px solid #eee', width: '100%' }} />
          <div className="flex flex-col items-start w-full gap-5 mt-5">
             {detailList.map((item) => (
-               <ListItem
-                  key={item.name}
-                  name={item.name}
-                  value={item.value}
-                  icon={item.icon}
-                  bonusMission={item.bonusMission}
-               />
+               <ListItem key={item.name} name={item.name} value={item.value} icon={item.icon} bonusMission={item.bonusMission} />
             ))}
          </div>
       </div>
    );
 }
 
-const ListItem = ({
-   name,
-   icon,
-   value,
-   bonusMission,
-}: {
-   name: string;
-   icon: ReactNode;
-   value?: string;
-   bonusMission?: IBonusMission[];
-}) => (
-   <li
-      className={`flex w-full px-5 gap-6 ${name === '보너스 미션' ? 'items-start' : 'items-center'}`}
-   >
+const ListItem = ({ name, icon, value, bonusMission }: { name: string; icon: ReactNode; value?: string; bonusMission?: IBonusMission[] }) => (
+   <li className={`flex w-full px-5 gap-6 ${name === '보너스 미션' ? 'items-start' : 'items-center'}`}>
       {icon}
       <div className="flex flex-col gap-[6px] text-[13px]">
          <span>{name}</span>
