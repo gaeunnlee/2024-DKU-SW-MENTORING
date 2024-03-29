@@ -10,6 +10,9 @@ import Upload from './pages/upload';
 import Missions from './pages/missions';
 import Teams from './pages/teams';
 import PrivateRoute from './PrivateRoute';
+import Notice from './pages/notice/notice';
+import PostDetail from './pages/post-detail';
+import NoticeDetail from './pages/notice/detail';
 
 export default function Router() {
    return (
@@ -26,6 +29,7 @@ export default function Router() {
                }
             />
             <Route path={route.login.pathname} element={<Login />} />
+            <Route path={route.postDetail.pathname} element={<PostDetail />} />
             <Route
                path={route.upload.pathname}
                element={
@@ -36,6 +40,11 @@ export default function Router() {
             />
             <Route path={route.missions.pathname} element={<Missions />} />
             <Route path={route.teams.pathname} element={<Teams />} />
+            <Route path={route.notice.pathname} element={<Notice />} />
+            <Route
+               path={route.noticeDetail.pathname}
+               element={<NoticeDetail />}
+            />
          </Routes>
          <Nav />
       </BrowserRouter>

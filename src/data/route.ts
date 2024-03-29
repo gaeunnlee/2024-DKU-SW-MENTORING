@@ -35,4 +35,19 @@ export const route = {
       name: '로그인',
       pathname: '/login',
    },
+   notice: {
+      id: 'NOTICE',
+      name: '공지',
+      pathname: '/notice',
+   },
+   noticeDetail: {
+      id: '공지상세',
+      name: '공지상세',
+      pathname: '/notice/:id',
+   },
+   postDetail: {
+      id: '상세',
+      name: '상세',
+      pathname: '/post/:id',
+   },
 };

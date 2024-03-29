@@ -53,29 +53,43 @@ export default function Missions({
    };
 
    const filterMissionsByDifficulty = (e: React.MouseEvent<HTMLElement>) => {
+      setHasBonusMission(false);
+      setIsScrollTop(true);
+
       if (e.currentTarget.id === filteredDifficulty) {
-         fetchMissions({});
-         e.currentTarget.classList.remove('difficulty-checked');
+         e.currentTarget.classList.remove('checked');
          setFilteredDifficulty('');
       } else {
-         document
-            .querySelector('.difficulty-checked')
-            ?.classList.remove('difficulty-checked');
-         e.currentTarget.classList.toggle('difficulty-checked');
+         document.querySelector('.checked')?.classList.remove('checked');
+         e.currentTarget.classList.toggle('checked');
          setFilteredDifficulty(e.currentTarget.id);
-         setIsScrollTop(true);
       }
    };
 
    const filterBonusMission = (e: React.ChangeEvent<HTMLInputElement>) => {
-      e.currentTarget.parentElement!.classList.toggle('bonus-checked');
-      setHasBonusMission(e.currentTarget.checked);
+      if (hasBonusMission) {
+         document.querySelector('.checked')?.classList.remove('checked');
+         setHasBonusMission(false);
+      } else {
+         document.querySelector('.checked')?.classList.remove('checked');
+         e.currentTarget.parentElement!.classList.add('checked');
+         setHasBonusMission(true);
+      }
+      setFilteredDifficulty('');
       setIsScrollTop(true);
    };
 
    useEffect(() => {
-      fetchMissions({ difficulty: filteredDifficulty, hasBonusMission });
-   }, [filteredDifficulty, hasBonusMission]);
+      if (filteredDifficulty === '' && hasBonusMission === false) {
+         fetchMissions({});
+      } else {
+         fetchMissions({
+            hasBonusMission: hasBonusMission,
+            difficulty: filteredDifficulty,
+         });
+      }
+   }, [hasBonusMission, filteredDifficulty]);
+
    return (
       <Layout className="w-full" style={{ padding: 0 }}>
          <FilterContainer className="flex gap-2 sticky top-0 bg-white p-3">
@@ -147,8 +161,7 @@ export default function Missions({
 }
 
 const FilterContainer = styled.div`
-   .difficulty-checked,
-   .bonus-checked {
+   .checked {
       background-color: black;
       color: white;
    }

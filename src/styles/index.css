@@ -26,6 +26,14 @@ html {
    font-size: 13px;
 }
 
+/* React Spring Bottom Sheet */
+div[aria-modal='true'] {
+   justify-self: center;
+   max-width: 480px;
+   width: 100%;
+   overscroll-behavior: none;
+}
+
 .swiper-carousel {
    transition: opacity 0.2s ease-in-out;
 }
