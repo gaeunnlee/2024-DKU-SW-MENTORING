@@ -55,4 +55,9 @@ export const route = {
       name: '작성글',
       pathname: '/my-posts',
    },
+   'unapproved-posts': {
+      id: '미승인 글',
+      name: '미승인 글',
+      pathname: '/unapproved-posts',
+   },
 };

@@ -43,7 +43,7 @@ export default function Post({ data }: { data: IPost }) {
       missionId: number;
    }) => {
       const handleAcceptance = (method: string) => {
-         let score = '';
+         let score = null;
          const patchAcceptance = () => {
             patch({ api: `/${method}/mission/${missionId}`, auth: true }).then((response) => {
                eventTarget.innerHTML = method === 'cancel' ? '거부 처리' : '승인 취소';
@@ -51,8 +51,9 @@ export default function Post({ data }: { data: IPost }) {
             });
          };
          if (method === 'accept') {
-            score = prompt('보너스 점수만 입력해주세요 (없으면 입력 X)', '') ?? '';
+            score = prompt('보너스 점수만 입력해주세요 (없으면 입력 X)', '');
             if (score !== null) {
+               console.log(score);
                patchAcceptance();
             }
          } else {

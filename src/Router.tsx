@@ -14,6 +14,7 @@ import Notice from './pages/notice/notice';
 import PostDetail from './pages/post-detail';
 import NoticeDetail from './pages/notice/detail';
 import MyPosts from './pages/mypage/my-posts';
+import UnapprovedPosts from './pages/unapproved';
 
 export default function Router() {
    return (
@@ -48,6 +49,7 @@ export default function Router() {
                }
             />
             <Route path={route.missions.pathname} element={<Missions />} />
+            <Route path={route['unapproved-posts'].pathname} element={<UnapprovedPosts />} />
             <Route path={route.teams.pathname} element={<Teams />} />
             <Route path={route.notice.pathname} element={<Notice />} />
             <Route path={route.noticeDetail.pathname} element={<NoticeDetail />} />

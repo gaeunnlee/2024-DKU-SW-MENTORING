@@ -16,7 +16,7 @@ export default function AdminMenu() {
          icon: MdOutlineFactCheck,
          name: '미승인',
          onClick: () => {
-            navigate('/unapproved-missions');
+            navigate('/unapproved-posts');
          },
       },
       {
