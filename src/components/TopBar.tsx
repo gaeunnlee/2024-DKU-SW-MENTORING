@@ -4,6 +4,7 @@ import { useLocation } from 'react-router-dom';
 import { route } from '../data/route';
 import { useEffect, useState } from 'react';
 import { useNavStore } from '../stores/nav-stores';
+import LogoImage from '../assets/images/logo.png';
 
 export default function TopBar() {
    const { pathname } = useLocation();
@@ -20,7 +21,7 @@ export default function TopBar() {
 
    return (
       <Container className={`${!isNavVisible && 'hidden'}`}>
-         {pathname === '/' ? <LogoTitle>結</LogoTitle> : <>{title}</>}
+         {pathname === '/' ? <Logo src={LogoImage} /> : <>{title}</>}
       </Container>
    );
 }
@@ -36,6 +37,7 @@ const Container = styled.nav`
    transition: 0.2s;
    opacity: 1;
    box-shadow: 0px 2px 4px -2px rgba(0, 0, 0, 0.15);
+   overflow: hidden;
    &.hidden {
       height: 0;
       opacity: 0;
@@ -44,8 +46,8 @@ const Container = styled.nav`
 `;
 
 const Logo = styled.img<{ src: string }>`
-   width: 40px;
-   height: 40px;
+   width: 60px;
+   height: 60px;
    background-size: cover;
    background-image: url(${(props) => props.src});
    border-radius: 100%;

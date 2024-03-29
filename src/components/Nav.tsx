@@ -1,8 +1,9 @@
 import React from 'react';
 import styled from 'styled-components';
-import { GoHome, GoPerson, GoTasklist, GoListOrdered } from 'react-icons/go';
+import { GoHome, GoPerson, GoTasklist } from 'react-icons/go';
 import { VscDiffAdded } from 'react-icons/vsc';
 import { Link, useLocation } from 'react-router-dom';
+import { IoNotificationsOutline } from 'react-icons/io5';
 
 const Container = styled.nav`
    position: absolute;
@@ -20,7 +21,7 @@ const Container = styled.nav`
    align-items: center;
    font-size: 30px;
    color: #a1a1a1;
-   z-index: 999;
+   z-index: 2;
 `;
 
 const NavItem = styled(Link)<{ color: string }>`
@@ -59,8 +60,8 @@ const navItems = [
       icon: <VscDiffAdded />,
    },
    {
-      id: '/teams',
-      icon: <GoListOrdered />,
+      id: '/notice',
+      icon: <IoNotificationsOutline />,
    },
    {
       id: '/mypage',

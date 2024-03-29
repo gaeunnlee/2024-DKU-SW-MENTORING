@@ -6,16 +6,20 @@ import { useAuth } from '../../hooks/useAuth';
 import Button from '../../components/ui/Button';
 import profile from '../../assets/images/profile.png';
 import { useApi } from '../../hooks/useApi';
-import { IUserInfo } from '../../data/interface';
+import { IPost, IPostBoard, IUserInfo } from '../../data/interface';
 import { IoSettingsSharp } from 'react-icons/io5';
 import { useModal } from '../../hooks/useModal';
 import ProfileEditor from './ProfileEditor';
+import { FaUserCircle } from 'react-icons/fa';
+import styled from 'styled-components';
+import UserPosts from './userPosts';
 
 export default function MyPage() {
    const { isLoggedIn, logout } = useAuth();
    const { get } = useApi();
    const [userInfo, setUserInfo] = useState<IUserInfo>();
    const { open } = useModal();
+   const [userPosts, setUserPosts] = useState<IPost[]>();
 
    useEffect(() => {
       get({ api: '/user', auth: true }).then(function (data: IUserInfo) {
@@ -39,13 +43,18 @@ export default function MyPage() {
          {isLoggedIn ? (
             <>
                <div className="flex items-center gap-3 w-full">
-                  <div className="flex flex-col gap-2 w-[100px] h-[100px] border-zinc-300 bo border-solid border-[1px] rounded-full overflow-hidden">
+                  {/* <div className="flex flex-col gap-2 w-[100px] h-[100px] border-zinc-300 bo border-solid border-[1px] rounded-full overflow-hidden">
                      <img className="w-[100px] h-[100px]" src={profile} />
+                  </div> */}
+                  <div className="w-[85px] flex justify-center text-[80px] text-[#ddd]">
+                     <FaUserCircle />
                   </div>
                   <div className="flex flex-col gap-2 w-[calc(100%-100px)]">
-                     <p className="text-sm border-black border-solid border-[1px] w-fit px-2 py-[0.1rem] rounded-md">
-                        {userInfo?.teamName}
-                     </p>
+                     {userInfo !== undefined && (
+                        <p className="text-sm border-black border-solid border-[1px] w-fit px-2 py-[0.1rem] rounded-md">
+                           {userInfo?.teamName}
+                        </p>
+                     )}
                      <p className="text-lg">{userInfo?.nickname}</p>
                      <div className="flex justify-between">
                         <p>
@@ -68,6 +77,7 @@ export default function MyPage() {
                   }}
                   value="로그아웃"
                />
+               <UserPosts />
             </>
          ) : (
             <Box className="items-center" shadow={false}>

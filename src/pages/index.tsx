@@ -12,10 +12,9 @@ export default function Index() {
 
    useEffect(() => {
       get({
-         api: '/post/mission-board?bodySize=100&page=0&size=20&sort=id,desc',
+         api: '/post/mission-board?bodySize=300&page=0&size=20&sort=id,desc',
       }).then(function (data: IPostBoard) {
          setPosts(data.content);
-         0;
       });
    }, []);
 

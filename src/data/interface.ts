@@ -1,5 +1,5 @@
-export interface IPostBoard {
-   content: IPost[];
+export interface IBoard {
+   content: unknown;
    hasNext: boolean;
    totalPages: number;
    totalElements: number;
@@ -9,15 +9,12 @@ export interface IPostBoard {
    last: boolean;
 }
 
-export interface IMissionBoard {
+export interface IPostBoard extends IBoard {
+   content: IPost[];
+}
+
+export interface IMissionBoard extends IBoard {
    content: IMission[];
-   hasNext: boolean;
-   totalPages: number;
-   totalElements: number;
-   page: number;
-   size: number;
-   first: boolean;
-   last: boolean;
 }
 
 export interface IMission {
@@ -46,6 +43,10 @@ export interface IPost {
    files: IFile[];
    commentCount: number;
    missionId: number;
+   registerStatus: string;
+   bonusMissionSuccessful: boolean;
+   mine: boolean;
+   createdAt: string;
 }
 
 export interface IFile {
@@ -61,15 +62,8 @@ export interface ITeam {
    score: number;
 }
 
-export interface ITeamBoard {
+export interface ITeamBoard extends IBoard {
    content: ITeam[];
-   hasNext: boolean;
-   totalPages: number;
-   totalElements: number;
-   page: number;
-   size: number;
-   first: boolean;
-   last: boolean;
 }
 
 export interface IToken {
@@ -92,4 +86,33 @@ export interface IUserInfo {
    studentId: string;
    teamName: string;
    username: string;
+}
+
+export interface INoticeBoard extends IBoard {
+   content: INotice[];
+}
+
+export interface INotice {
+   id: number;
+   title: string;
+   author: string;
+   body: string;
+   images: IFile[];
+   files: IFile[];
+   commentCount: number;
+}
+
+export interface INoticeDetail extends INotice {
+   createdAt: string;
+   mine: boolean;
+}
+
+export interface ICommentResponse extends IComment {
+   replies: IComment[];
+}
+
+export interface IComment {
+   id: number;
+   author: string;
+   content: string;
 }
