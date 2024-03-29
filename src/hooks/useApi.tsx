@@ -3,23 +3,11 @@ import React from 'react';
 import { API_URL } from '../data/constant';
 
 export const useApi = () => {
-   const post = async ({
-      api,
-      body,
-      type,
-      auth,
-   }: {
-      api: string;
-      body: unknown;
-      type?: string;
-      auth?: boolean;
-   }) => {
+   const post = async ({ api, body, type, auth }: { api: string; body: unknown; type?: string; auth?: boolean }) => {
       const { data } = await axios.post(API_URL + api, body, {
          headers: {
             'Content-Type': type === undefined ? 'application/json' : type,
-            Authorization: auth
-               ? `Bearer ${localStorage.getItem('accessToken')}`
-               : null,
+            Authorization: auth ? `Bearer ${localStorage.getItem('accessToken')}` : null,
          },
       });
       return data;
@@ -29,12 +17,21 @@ export const useApi = () => {
       const { data } = await axios.get(API_URL + api, {
          headers: {
             'Content-Type': 'application/json',
-            Authorization: auth
-               ? `Bearer ${localStorage.getItem('accessToken')}`
-               : null,
+            Authorization: auth ? `Bearer ${localStorage.getItem('accessToken')}` : null,
          },
       });
       return data;
    };
-   return { post, get };
+
+   const patch = async ({ api, body, type, auth }: { api: string; body?: unknown; type?: string; auth?: boolean }) => {
+      const { data } = await axios.patch(API_URL + api, body, {
+         headers: {
+            'Content-Type': type === undefined ? 'application/json' : type,
+            Authorization: auth ? `Bearer ${localStorage.getItem('accessToken')}` : null,
+         },
+      });
+      return data;
+   };
+
+   return { post, get, patch };
 };

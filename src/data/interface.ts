@@ -1,3 +1,5 @@
+import { TMissionStatus } from './type';
+
 export interface IBoard {
    content: unknown;
    hasNext: boolean;
@@ -43,7 +45,7 @@ export interface IPost {
    files: IFile[];
    commentCount: number;
    missionId: number;
-   registerStatus: string;
+   registerStatus: TMissionStatus;
    bonusMissionSuccessful: boolean;
    mine: boolean;
    createdAt: string;

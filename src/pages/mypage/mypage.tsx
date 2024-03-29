@@ -12,12 +12,13 @@ export default function MyPage() {
    const { get } = useApi();
    const [userInfo, setUserInfo] = useState<IUserInfo>();
    const [teamInfo, setTeamInfo] = useState<IMyTeam>();
-   const { setRole } = useRoleStore();
+   const { setRole, setIsAdmin } = useRoleStore();
 
    useEffect(() => {
       get({ api: '/user', auth: true }).then(function (data: IUserInfo) {
          setUserInfo(data);
          setRole(data.role);
+         setIsAdmin(data.role === 'Admin');
       });
    }, []);
 
