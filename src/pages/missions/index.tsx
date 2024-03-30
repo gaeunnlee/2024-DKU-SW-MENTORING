@@ -30,7 +30,7 @@ export default function Missions({
 
    const handleMissionApi = ({ difficulty, hasBonusMission }: { difficulty?: string; hasBonusMission?: boolean }) => {
       setApi(
-         `/mission?sort=id,asc${hasBonusMission ? `hasBonusMission=${hasBonusMission}` : ''}${difficulty ? `&difficulty=${filteredDifficulty}` : ''}`
+         `/mission?sort=id,asc&${hasBonusMission ? `hasBonusMission=${hasBonusMission}` : ''}${difficulty ? `&difficulty=${filteredDifficulty}` : ''}`
       );
    };
 
@@ -93,7 +93,7 @@ export default function Missions({
                <MissionInfo>
                   <Difficulty>{Object.getOwnPropertyDescriptor(difficulty, data.difficulty)?.value}</Difficulty>
                   <span>{data.point}점</span>
-                  {/* {data.bonusMission.length > 0 && <span>보너스 미션 ♥️</span>} */}
+                  {data.bonusMission.length > 0 && <span>보너스 미션 ♥️</span>}
                </MissionInfo>
             </div>
          </Mission>

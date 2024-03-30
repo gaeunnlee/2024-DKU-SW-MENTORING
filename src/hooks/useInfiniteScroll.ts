@@ -20,7 +20,7 @@ export const useInfiniteScroll = <T>({ api, itemPerPage }: { api: string; itemPe
    useEffect(() => {
       setPage(0);
       setList([]);
-   }, [pathname]);
+   }, [pathname, api]);
 
    useEffect(() => {
       const observer = new IntersectionObserver(callback);
