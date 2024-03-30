@@ -14,7 +14,7 @@ export default function TeamInfo({ data }: { data?: IMyTeam }) {
             <p>
                점수
                <br />
-               <span className="text-lg">320점</span>
+               <span className="text-lg">{data?.score}점</span>
             </p>
          ),
          link: '',
