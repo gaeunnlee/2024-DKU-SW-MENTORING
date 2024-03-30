@@ -63,7 +63,6 @@ const Logo = styled.img<{ src: string }>`
    height: 60px;
    background-size: cover;
    background-image: url(${(props) => props.src});
-   border-radius: 100%;
 `;
 
 const LogoTitle = styled.p`
