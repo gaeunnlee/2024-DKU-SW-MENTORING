@@ -26,7 +26,6 @@ export default function BoardLayout<T extends ICell>({
       noDesc: option?.noDesc,
    });
    const [isEmpty, setIsEmpty] = React.useState(false);
-   const navigate = useNavigate();
 
    useEffect(() => {
       !list && setIsEmpty(true);

@@ -41,7 +41,7 @@ export const useInfiniteScroll = <T>({
    const fetchList = useCallback(
       async (boardPage: number) => {
          if (api.length > 0) {
-            const API = `${api}&page=${boardPage}&size=${itemPerPage ? itemPerPage : 2}${noDesc !== true && '&sort=id,desc'}`;
+            const API = `${api}&page=${boardPage}&size=${itemPerPage ? itemPerPage : 2}${noDesc !== true ? '&sort=id,desc' : ''}`;
             setFetchSuccess(false);
             get({
                api: API,
