@@ -4,23 +4,13 @@ import Layout from '../components/Layout';
 import Post from '../components/Post';
 import { IPostBoard, IPost } from '../data/interface';
 import { useApi } from '../hooks/useApi';
+import BoardLayout from '../components/BoardLayout';
 
-const Container = styled.div``;
 export default function Index() {
-   const [posts, setPosts] = useState<IPost[]>();
-   const { get } = useApi();
-
-   useEffect(() => {
-      get({
-         api: '/post/mission-board?bodySize=300&page=0&size=20&sort=id,desc',
-      }).then(function (data: IPostBoard) {
-         setPosts(data.content);
-      });
-   }, []);
-
+   const Cell = ({ data }: { data: IPost }) => <Post key={data.id} data={data} />;
    return (
       <Layout className="flex flex-col gap-9">
-         {posts?.map((data: IPost) => <Post key={data.id} data={data} />)}
+         <BoardLayout api="/post/mission-board" setCell={(data: IPost) => <Cell data={data} />} />
       </Layout>
    );
 }
