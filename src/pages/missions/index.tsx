@@ -30,7 +30,7 @@ export default function Missions({
 
    const handleMissionApi = ({ difficulty, hasBonusMission }: { difficulty?: string; hasBonusMission?: boolean }) => {
       setApi(
-         `/mission?${hasBonusMission ? `hasBonusMission=${hasBonusMission}` : ''}${difficulty ? `&difficulty=${filteredDifficulty}` : ''}`
+         `/mission?sort=id,asc${hasBonusMission ? `hasBonusMission=${hasBonusMission}` : ''}${difficulty ? `&difficulty=${filteredDifficulty}` : ''}`
       );
    };
 
@@ -140,7 +140,7 @@ export default function Missions({
             </HorizontalScrollBox>
          </FilterContainer>
          <BoardLayout<IMission>
-            option={{ itemPerPage: 10, noDesc: true }}
+            option={{ itemPerPage: 10 }}
             api={api}
             setCell={(data: IMission) => <Cell data={data} />}
          />

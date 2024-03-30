@@ -7,7 +7,6 @@ interface ICell {
 }
 
 interface IOption {
-   noDesc?: boolean;
    itemPerPage?: number;
 }
 
@@ -23,7 +22,6 @@ export default function BoardLayout<T extends ICell>({
    const { list, isLoading, bottom } = useInfiniteScroll<T>({
       api: api,
       itemPerPage: option?.itemPerPage,
-      noDesc: option?.noDesc,
    });
    const [isEmpty, setIsEmpty] = React.useState(false);
 

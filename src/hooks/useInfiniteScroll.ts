@@ -3,15 +3,7 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import { useApi } from './useApi';
 
-export const useInfiniteScroll = <T>({
-   api,
-   noDesc,
-   itemPerPage,
-}: {
-   api: string;
-   noDesc?: boolean;
-   itemPerPage?: number;
-}) => {
+export const useInfiniteScroll = <T>({ api, itemPerPage }: { api: string; itemPerPage?: number }) => {
    const [list, setList] = useState<T[]>([]);
    const [page, setPage] = useState(0);
    const [fetchSuccess, setFetchSuccess] = useState(false);
@@ -41,11 +33,10 @@ export const useInfiniteScroll = <T>({
    const fetchList = useCallback(
       async (boardPage: number) => {
          if (api.length > 0) {
-            const API = `${api}&page=${boardPage}&size=${itemPerPage ? itemPerPage : 2}${noDesc !== true ? '&sort=id,desc' : ''}`;
+            const API = `${api}&page=${boardPage}&size=${itemPerPage ? itemPerPage : 2}`;
             setFetchSuccess(false);
             get({
                api: API,
-               auth: true,
             }).then(function (data) {
                if (data.content.length !== 0) {
                   setList((prev) => {
