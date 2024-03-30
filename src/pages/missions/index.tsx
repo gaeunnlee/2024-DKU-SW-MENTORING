@@ -4,33 +4,38 @@ import Box from '../../components/ui/Box';
 import styled from 'styled-components';
 import { difficulty } from '../../data/enum';
 import { useModal } from '../../hooks/useModal';
-import { IMission, IMissionBoard } from '../../data/interface';
+import { IMission } from '../../data/interface';
 import MissionDetail from './detail';
 import { useApi } from '../../hooks/useApi';
 import { difficultyList } from '../../data/difficultyList';
 import HorizontalScrollBox from '../../components/HorizontalScrollBox';
 import { SwiperSlide } from 'swiper/react';
 import { useLayoutScrollStore } from '../../stores/layout-scroll-stores';
+import BoardLayout from '../../components/BoardLayout';
 
-export default function Missions({ searchMode, passMissionId }: { searchMode?: boolean; passMissionId?: (id: number) => void }) {
+export default function Missions({
+   searchMode,
+   passMissionId,
+}: {
+   searchMode?: boolean;
+   passMissionId?: (id: number) => void;
+}) {
    const [missions, setMissions] = useState<IMission[]>();
    const [filteredDifficulty, setFilteredDifficulty] = useState('');
    const [hasBonusMission, setHasBonusMission] = useState<boolean>();
+   const [api, setApi] = useState('');
    const { open, close } = useModal();
-   const { get } = useApi();
 
    const { setIsScrollTop } = useLayoutScrollStore();
 
-   const fetchMissions = ({ difficulty, hasBonusMission }: { difficulty?: string; hasBonusMission?: boolean }) => {
-      get({
-         api: `/mission?page=0&size=200${hasBonusMission ? `&hasBonusMission=${hasBonusMission}` : ''}${difficulty ? `&difficulty=${filteredDifficulty}` : ''}`,
-      }).then(function (data: IMissionBoard) {
-         setMissions(data.content);
-      });
+   const handleMissionApi = ({ difficulty, hasBonusMission }: { difficulty?: string; hasBonusMission?: boolean }) => {
+      setApi(
+         `/mission?${hasBonusMission ? `hasBonusMission=${hasBonusMission}` : ''}${difficulty ? `&difficulty=${filteredDifficulty}` : ''}`
+      );
    };
 
    useEffect(() => {
-      fetchMissions({});
+      handleMissionApi({});
    }, []);
 
    const showDetail = (data: IMission) => {
@@ -67,11 +72,39 @@ export default function Missions({ searchMode, passMissionId }: { searchMode?: b
       setIsScrollTop(true);
    };
 
+   const Cell = ({ data }: { data: IMission }) => (
+      <Box
+         onClick={() => {
+            if (searchMode) {
+               close();
+               passMissionId !== undefined && passMissionId(data.id);
+            } else {
+               showDetail(data);
+            }
+         }}
+         shadow={false}
+         key={data.id}
+         className="cursor-pointer items-center gap-2"
+      >
+         <Mission>
+            <Number>{data.id}</Number>
+            <div className="flex flex-col gap-1">
+               <MissionName>{data.name}</MissionName>
+               <MissionInfo>
+                  <Difficulty>{Object.getOwnPropertyDescriptor(difficulty, data.difficulty)?.value}</Difficulty>
+                  <span>{data.point}점</span>
+                  {/* {data.bonusMission.length > 0 && <span>보너스 미션 ♥️</span>} */}
+               </MissionInfo>
+            </div>
+         </Mission>
+      </Box>
+   );
+
    useEffect(() => {
       if (filteredDifficulty === '' && hasBonusMission === false) {
-         fetchMissions({});
+         handleMissionApi({});
       } else {
-         fetchMissions({
+         handleMissionApi({
             hasBonusMission: hasBonusMission,
             difficulty: filteredDifficulty,
          });
@@ -106,39 +139,15 @@ export default function Missions({ searchMode, passMissionId }: { searchMode?: b
                ))}
             </HorizontalScrollBox>
          </FilterContainer>
-         <div className="h-[80dvh] px-3 pb-[60px] mb-[30px]">
-            {missions?.map((item) => (
-               <Box
-                  onClick={() => {
-                     if (searchMode) {
-                        close();
-                        passMissionId !== undefined && passMissionId(item.id);
-                     } else {
-                        showDetail(item);
-                     }
-                  }}
-                  shadow={false}
-                  key={item.id}
-                  className="cursor-pointer items-center gap-2"
-               >
-                  <Mission>
-                     <Number>{item.id}</Number>
-                     <div className="flex flex-col gap-1">
-                        <MissionName>{item.name}</MissionName>
-                        <MissionInfo>
-                           <Difficulty>{Object.getOwnPropertyDescriptor(difficulty, item.difficulty)?.value}</Difficulty>
-                           <span>{item.point}점</span>
-                           {item.bonusMission.length > 0 && <span>보너스 미션 ♥️</span>}
-                        </MissionInfo>
-                     </div>
-                  </Mission>
-               </Box>
-            ))}
-         </div>
+         <BoardLayout<IMission>
+            option={{ itemPerPage: 10, noDesc: true }}
+            api={api}
+            setCell={(data: IMission) => <Cell data={data} />}
+         />
+         <div className="h-[80dvh] px-3 pb-[60px] mb-[30px]"></div>
       </Layout>
    );
 }
-
 const FilterContainer = styled.div`
    .checked {
       background-color: black;

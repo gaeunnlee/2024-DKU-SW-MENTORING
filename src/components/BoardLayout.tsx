@@ -1,10 +1,30 @@
 import React, { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { IPost } from '../data/interface';
 import { useInfiniteScroll } from '../hooks/useInfiniteScroll';
 
-export default function BoardLayout({ api, setCell }: { api: string; setCell: (data: IPost) => JSX.Element }) {
-   const { list, isLoading, bottom } = useInfiniteScroll<IPost>(api);
+interface ICell {
+   id: number;
+}
+
+interface IOption {
+   noDesc?: boolean;
+   itemPerPage?: number;
+}
+
+export default function BoardLayout<T extends ICell>({
+   api,
+   setCell,
+   option,
+}: {
+   api: string;
+   setCell: (data: T) => JSX.Element;
+   option?: IOption;
+}) {
+   const { list, isLoading, bottom } = useInfiniteScroll<T>({
+      api: api,
+      itemPerPage: option?.itemPerPage,
+      noDesc: option?.noDesc,
+   });
    const [isEmpty, setIsEmpty] = React.useState(false);
    const navigate = useNavigate();
 
