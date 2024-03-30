@@ -12,6 +12,7 @@ import { useAuth } from '../hooks/useAuth';
 import { useApi } from '../hooks/useApi';
 import { ButtonNameByMissionStatus, TagInfoByMissionStatus } from '../data/missionStatus';
 import { TMissionStatus } from '../data/type';
+import { useModal } from '../hooks/useModal';
 
 const Container = styled.div`
    display: flex;
@@ -24,6 +25,8 @@ export default function Post({ data }: { data: IPost }) {
    const sheetRef = useRef<BottomSheetRef>(null);
    const { isAdmin } = useRoleStore();
    const { patch } = useApi();
+   const { isLoggedIn } = useAuth();
+   const { open } = useModal();
 
    useEffect(() => {
       getMission(data.missionId).then(function (data: IMission) {
@@ -120,7 +123,9 @@ export default function Post({ data }: { data: IPost }) {
             <div
                className="flex gap-1 text-zinc-500 cursor-pointer"
                onClick={() => {
-                  setOpenBottomSheet(true);
+                  isLoggedIn
+                     ? setOpenBottomSheet(true)
+                     : open({ type: 'error', content: <>로그인 이후 이용 가능합니다.</> });
                }}
             >
                댓글 {data.commentCount}개 보기
