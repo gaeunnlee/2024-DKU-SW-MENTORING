@@ -16,6 +16,11 @@ export default function NoticeDetail() {
    const { get } = useApi();
    const { setIsPreviousVisible } = useNavStore();
 
+   useEffect(() => {
+      setNoticeId(pathname.split('/notice/')[1]);
+      setIsPreviousVisible(true);
+   }, []);
+
    useLayoutEffect(() => {
       get({ api: `/notice/${noticeId}`, auth: true }).then((response) => {
          setContent(response);
