@@ -52,7 +52,14 @@ export default function Router() {
             <Route path={route['unapproved-posts'].pathname} element={<UnapprovedPosts />} />
             <Route path={route.teams.pathname} element={<Teams />} />
             <Route path={route.notice.pathname} element={<Notice />} />
-            <Route path={route.noticeDetail.pathname} element={<NoticeDetail />} />
+            <Route
+               path={route.noticeDetail.pathname}
+               element={
+                  <PrivateRoute>
+                     <NoticeDetail />
+                  </PrivateRoute>
+               }
+            />
          </Routes>
          <Nav />
       </BrowserRouter>

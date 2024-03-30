@@ -3,10 +3,12 @@ import { IPost, IPostBoard } from '../../data/interface';
 import { useApi } from '../../hooks/useApi';
 import Layout from '../../components/Layout';
 import Post from '../../components/Post';
+import { useNavStore } from '../../stores/nav-stores';
 
 export default function UnapprovedPosts() {
    const [posts, setPosts] = useState<IPost[]>();
    const { get } = useApi();
+   const { setIsPreviousVisible } = useNavStore();
 
    useEffect(() => {
       get({
@@ -16,6 +18,7 @@ export default function UnapprovedPosts() {
          setPosts(data.content);
          console.log(data);
       });
+      setIsPreviousVisible(true);
    }, []);
 
    return (
