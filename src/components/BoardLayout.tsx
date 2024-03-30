@@ -38,16 +38,7 @@ export default function BoardLayout<T extends ICell>({
 
    return (
       <>
-         {list?.map((data) => (
-            <div
-               key={data.id}
-               onClick={() => {
-                  navigate(`${data.id}`);
-               }}
-            >
-               {setCell(data)}
-            </div>
-         ))}
+         {list?.map((data) => <div key={data.id}>{setCell(data)}</div>)}
          {!isLoading && !isEmpty && <div ref={bottom} />}
       </>
    );
