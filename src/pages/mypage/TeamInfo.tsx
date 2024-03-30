@@ -1,12 +1,17 @@
-import React from 'react';
+import React, { useRef, useState } from 'react';
 import { IMyTeam } from '../../data/interface';
 import { ReactComponent as ScoreIcon } from '../../assets/svg/target-dynamic-color.svg';
 import { ReactComponent as SuccessIcon } from '../../assets/svg/thumb-up-dynamic-color.svg';
 import { ReactComponent as MissionIcon } from '../../assets/svg/folder-dynamic-color.svg';
 import { useNavigate } from 'react-router-dom';
+import { BottomSheet, BottomSheetRef } from 'react-spring-bottom-sheet';
+import MissionCompleted from './MissionCompleted';
 
 export default function TeamInfo({ data }: { data?: IMyTeam }) {
    const navigate = useNavigate();
+   const [openBottomSheet, setOpenBottomSheet] = useState(false);
+   const sheetRef = useRef<BottomSheetRef>(null);
+
    const infoBoxData = [
       {
          icon: <ScoreIcon width="100%" height="50" />,
@@ -17,7 +22,9 @@ export default function TeamInfo({ data }: { data?: IMyTeam }) {
                <span className="text-lg">{data?.score}점</span>
             </p>
          ),
-         link: '',
+         event: () => {
+            null;
+         },
       },
       {
          icon: <MissionIcon width="100%" height="50" />,
@@ -28,7 +35,9 @@ export default function TeamInfo({ data }: { data?: IMyTeam }) {
                보러가기
             </p>
          ),
-         link: '/my-posts',
+         event: () => {
+            navigate('/my-posts');
+         },
       },
       {
          icon: <SuccessIcon width="100%" height="50" />,
@@ -39,7 +48,9 @@ export default function TeamInfo({ data }: { data?: IMyTeam }) {
                확인하기
             </p>
          ),
-         link: '',
+         event: () => {
+            setOpenBottomSheet(true);
+         },
       },
    ];
    return (
@@ -54,19 +65,32 @@ export default function TeamInfo({ data }: { data?: IMyTeam }) {
             ))}
          </div>
          <div className="flex gap-9 w-full">
-            {infoBoxData.map(({ icon, content, link }) => (
+            {infoBoxData.map(({ icon, content, event }, index) => (
                <div
-                  key="link"
+                  key={`InfoBox-${index}`}
                   onClick={() => {
-                     link && navigate(link);
+                     event();
                   }}
-                  className="bg-white w-1/3 text-center shadow-md p-3 rounded-lg"
+                  className={`bg-white w-1/3 text-center shadow-md p-3 rounded-lg ${index !== 0 && 'cursor-pointer'}`}
                >
                   {icon}
                   {content}
                </div>
             ))}
          </div>
+         <BottomSheet
+            open={openBottomSheet}
+            scrollLocking={true}
+            expandOnContentDrag={true}
+            ref={sheetRef}
+            className="completed-mission-bottom-sheet"
+            snapPoints={({ minHeight, maxHeight }) => [maxHeight * 0.95, maxHeight * 0.95]}
+            onDismiss={() => {
+               setOpenBottomSheet(false);
+            }}
+         >
+            <MissionCompleted />
+         </BottomSheet>
       </div>
    );
 }

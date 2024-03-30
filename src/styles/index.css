@@ -32,6 +32,9 @@ div[aria-modal='true'] {
    width: 100%;
    overscroll-behavior: none;
 }
+.completed-mission-bottom-sheet > div[aria-modal='true'] {
+   background-color: #f6f6f6;
+}
 
 /* 스크롤 바운딩 */
 .overscroll {

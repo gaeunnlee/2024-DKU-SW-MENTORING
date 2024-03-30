@@ -126,3 +126,17 @@ export interface IMyTeam {
    mentor: string;
    members: string[];
 }
+
+export interface ICompletedMissionBoard extends IBoard {
+   content: ICompletedMission[];
+}
+
+export interface ICompletedMission {
+   id: number;
+   name: string;
+   description: string;
+   point: number;
+   difficulty: string;
+   missionStatus: string;
+   bonusMission: IBonusMission;
+}
