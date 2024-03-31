@@ -12,6 +12,7 @@ import HorizontalScrollBox from '../../components/HorizontalScrollBox';
 import { SwiperSlide } from 'swiper/react';
 import { useLayoutScrollStore } from '../../stores/layout-scroll-stores';
 import BoardLayout from '../../components/BoardLayout';
+import { useSheetStore } from '../../stores/sheet-stores';
 
 export default function Missions({
    searchMode,
@@ -25,6 +26,7 @@ export default function Missions({
    const [hasBonusMission, setHasBonusMission] = useState<boolean>();
    const [api, setApi] = useState('');
    const { open, close } = useModal();
+   const { setIsSheetOpen } = useSheetStore();
 
    const { setIsScrollTop } = useLayoutScrollStore();
 
@@ -76,7 +78,7 @@ export default function Missions({
       <Box
          onClick={() => {
             if (searchMode) {
-               close();
+               setIsSheetOpen(false);
                passMissionId !== undefined && passMissionId(data.id);
             } else {
                showDetail(data);

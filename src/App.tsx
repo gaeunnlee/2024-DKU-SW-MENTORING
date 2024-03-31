@@ -2,16 +2,19 @@ import React from 'react';
 import Router from './Router';
 import styled from 'styled-components';
 import ModalProvider from './components/Modal/ModalProvider';
+import BottomSheetProvider from './components/BottomSheet/BottomSheetProvider';
 
 export default function App() {
    return (
-      <ModalProvider>
-         <Wrapper>
-            <Container>
-               <Router />
-            </Container>
-         </Wrapper>
-      </ModalProvider>
+      <BottomSheetProvider>
+         <ModalProvider>
+            <Wrapper>
+               <Container>
+                  <Router />
+               </Container>
+            </Wrapper>
+         </ModalProvider>
+      </BottomSheetProvider>
    );
 }
 

@@ -14,13 +14,12 @@ export const useInfiniteScroll = <T>({ api, itemPerPage }: { api: string; itemPe
          setPage((prevPage) => prevPage + 1);
       }
    };
-   const { pathname } = useLocation();
    const { get } = useApi();
 
    useEffect(() => {
       setPage(0);
       setList([]);
-   }, [pathname, api]);
+   }, [api]);
 
    useEffect(() => {
       const observer = new IntersectionObserver(callback);

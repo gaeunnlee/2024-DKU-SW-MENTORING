@@ -36,6 +36,9 @@ div[aria-modal='true'] {
    background-color: #f6f6f6;
 }
 
+.mission-sheet div[data-rsbs-scroll='true'] {
+}
+
 /* 스크롤 바운딩 */
 .overscroll {
    overscroll-behavior: none;

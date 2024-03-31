@@ -17,6 +17,7 @@ import { useApi } from '../hooks/useApi';
 import { AxiosError } from 'axios';
 import { useNavigate } from 'react-router-dom';
 import imageCompression from 'browser-image-compression';
+import { useBottomSheet } from '../hooks/useBottomSheet';
 
 interface IUpload {
    title: string;
@@ -43,6 +44,7 @@ export default function Upload() {
    const { post } = useApi();
    const navigate = useNavigate();
    const formData = new FormData();
+   const { openSheet } = useBottomSheet();
 
    useEffect(() => {
       setUploadData((prev) => {
@@ -171,10 +173,7 @@ export default function Upload() {
          <hr />
          <div
             onClick={() => {
-               open({
-                  type: 'full',
-                  content: <SearchMission setMissionId={setMissionId} />,
-               });
+               openSheet({ sheetName: 'mission-sheet', content: <SearchMission setMissionId={setMissionId} /> });
             }}
             className="mt-5 flex justify-between px-4 cursor-pointer text-[14px] items-center"
          >
