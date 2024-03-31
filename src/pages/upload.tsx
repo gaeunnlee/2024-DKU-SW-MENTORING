@@ -16,6 +16,7 @@ import { IFile, IMission } from '../data/interface';
 import { useApi } from '../hooks/useApi';
 import { AxiosError } from 'axios';
 import { useNavigate } from 'react-router-dom';
+import imageCompression from 'browser-image-compression';
 
 interface IUpload {
    title: string;
@@ -51,11 +52,7 @@ export default function Upload() {
          };
       });
    }, [missionName]);
-   const handleInputData = (
-      e:
-         | React.ChangeEvent<HTMLInputElement>
-         | React.ChangeEvent<HTMLTextAreaElement>
-   ) => {
+   const handleInputData = (e: React.ChangeEvent<HTMLInputElement> | React.ChangeEvent<HTMLTextAreaElement>) => {
       setUploadData((prev) => {
          return { ...prev, [e.target.name]: e.target.value };
       });
@@ -66,10 +63,21 @@ export default function Upload() {
       setFiles(null);
       setFiles(e.target.files!);
       const files = Array.from(e.target.files || []);
-      files.forEach((f) => {
-         setImages((prev) => {
-            return [...prev, URL.createObjectURL(f)];
-         });
+      const options = {
+         maxSizeMB: 0.5,
+         maxWidthOrHeight: 1024,
+         useWebWorker: true,
+      };
+      files.forEach(async (f) => {
+         try {
+            const compressedFile = await imageCompression(f, options);
+
+            await setImages((prev) => {
+               return [...prev, URL.createObjectURL(compressedFile)];
+            });
+         } catch (error) {
+            console.log(error);
+         }
       });
    };
 
@@ -77,10 +85,7 @@ export default function Upload() {
       formData.append('title', uploadData.title);
       formData.append('body', uploadData.body);
       formData.append('missionId', uploadData.missionId.toString());
-      formData.append(
-         'isBonusMissionSuccessful',
-         uploadData.isBonusMissionSuccessful.toString()
-      );
+      formData.append('isBonusMissionSuccessful', uploadData.isBonusMissionSuccessful.toString());
       files !== undefined &&
          files !== null &&
          Array.from(files).forEach((f) => {
