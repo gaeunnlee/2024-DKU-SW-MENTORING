@@ -32,7 +32,7 @@ export default function Upload() {
    const { open, close } = useModal();
    const [missionId, setMissionId] = useState(0);
    const [missionName, setMissionName] = useState('');
-   const [files, setFiles] = useState<FileList | null>();
+   const [compressedFiles, setCompressedFiles] = useState<File[]>([new File([], '')]);
    const [uploadData, setUploadData] = useState<IUpload>({
       title: '',
       body: '',
@@ -54,6 +54,7 @@ export default function Upload() {
          };
       });
    }, [missionName]);
+
    const handleInputData = (e: React.ChangeEvent<HTMLInputElement> | React.ChangeEvent<HTMLTextAreaElement>) => {
       setUploadData((prev) => {
          return { ...prev, [e.target.name]: e.target.value };
@@ -62,21 +63,22 @@ export default function Upload() {
 
    const handleFile = (e: React.ChangeEvent<HTMLInputElement>) => {
       setImages([]);
-      setFiles(null);
-      setFiles(e.target.files!);
+      setCompressedFiles([]);
       const files = Array.from(e.target.files || []);
       const options = {
          maxSizeMB: 0.5,
          maxWidthOrHeight: 1024,
          useWebWorker: true,
       };
+      const compressedFilesTemp: File[] = [];
       files.forEach(async (f) => {
+         setImages((prev) => {
+            return [...prev, URL.createObjectURL(f)];
+         });
          try {
-            const compressedFile = await imageCompression(f, options);
-
-            await setImages((prev) => {
-               return [...prev, URL.createObjectURL(compressedFile)];
-            });
+            const result = await imageCompression(f, options);
+            await compressedFilesTemp.push(new File([result], f.name));
+            await setCompressedFiles((prev) => compressedFilesTemp.concat([new File([result], f.name)]));
          } catch (error) {
             console.log(error);
          }
@@ -88,20 +90,23 @@ export default function Upload() {
       formData.append('body', uploadData.body);
       formData.append('missionId', uploadData.missionId.toString());
       formData.append('isBonusMissionSuccessful', uploadData.isBonusMissionSuccessful.toString());
-      files !== undefined &&
-         files !== null &&
-         Array.from(files).forEach((f) => {
-            formData.append('images', f);
+      if (compressedFiles !== undefined && compressedFiles !== null) {
+         compressedFiles.forEach((f, index) => {
+            if (index !== compressedFiles.length - 1) {
+               formData.append('images', f);
+            }
          });
-   }, [uploadData, files]);
+      }
+   }, [uploadData, compressedFiles]);
+
    const checkNull = () => {
       if (
          uploadData.title.length !== 0 &&
          uploadData.body.length !== 0 &&
          uploadData.missionId !== 0 &&
-         files !== undefined &&
-         files !== null &&
-         files?.length !== 0
+         compressedFiles !== undefined &&
+         compressedFiles !== null &&
+         compressedFiles?.length !== 0
       ) {
          return true;
       } else {
@@ -142,7 +147,7 @@ export default function Upload() {
             <>
                <AiOutlineDelete
                   onClick={() => {
-                     setFiles(null);
+                     setCompressedFiles([]);
                      setImages([]);
                   }}
                   className="self-end absolute z-10 cursor-pointer"
