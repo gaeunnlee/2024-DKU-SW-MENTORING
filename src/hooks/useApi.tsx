@@ -41,5 +41,19 @@ export const useApi = () => {
       return data;
    };
 
-   return { post, get, patch };
+   const axiosDelete = async ({ api, auth }: { api: string; auth?: boolean }) => {
+      try {
+         const { data } = await client.delete(api, {
+            headers: {
+               'Content-Type': 'application/json',
+               Authorization: auth ? `Bearer ${localStorage.getItem('accessToken')}` : null,
+            },
+         });
+         return data;
+      } catch (e) {
+         console.log(e);
+      }
+   };
+
+   return { post, get, patch, axiosDelete };
 };

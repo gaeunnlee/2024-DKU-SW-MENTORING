@@ -13,6 +13,9 @@ import { useApi } from '../hooks/useApi';
 import { ButtonNameByMissionStatus, TagInfoByMissionStatus } from '../data/missionStatus';
 import { TMissionStatus } from '../data/type';
 import { useModal } from '../hooks/useModal';
+import { AxiosError } from 'axios';
+import { useNavigate } from 'react-router-dom';
+import { useToastStore } from '../stores/toast-stores';
 
 const Container = styled.div`
    display: flex;
@@ -24,9 +27,11 @@ export default function Post({ data }: { data: IPost }) {
    const [openBottomSheet, setOpenBottomSheet] = useState(false);
    const sheetRef = useRef<BottomSheetRef>(null);
    const { isAdmin } = useRoleStore();
-   const { patch } = useApi();
+   const { patch, axiosDelete } = useApi();
    const { isLoggedIn } = useAuth();
-   const { open } = useModal();
+   const { open, close } = useModal();
+   const navigate = useNavigate();
+   const { setIsToastShow } = useToastStore();
 
    useEffect(() => {
       getMission(data.missionId).then(function (data: IMission) {
@@ -83,18 +88,48 @@ export default function Post({ data }: { data: IPost }) {
       </span>
    );
 
+   const deletePost = async (id: number) => {
+      await axiosDelete({ api: `/post/mission-board/${id}`, auth: true })
+         .then((response) => {
+            navigate(-1);
+            setIsToastShow(true, '⚒️ 삭제 완료');
+         })
+         .catch((e: AxiosError) => {
+            console.log(e);
+         });
+   };
+
    return (
       <Container>
          <div className="flex items-center justify-between w-full">
-            <div className="flex items-center gap-1 ">
+            <div className="flex items-center gap-1 w-full">
                <HiUserCircle style={{ fontSize: '40px', color: '#ddd' }} />
-               <div className="flex flex-col">
+               <div className="flex flex-col w-full">
                   <p className="leading-0 text-[0.9rem]">{data.author}</p>
 
-                  <p className="leading-0 text-slate-800 flex gap-1 items-center">
-                     {missionName}
-                     <MissionStatusTag status={data.registerStatus} />
-                  </p>
+                  <div className="flex justify-between w-full">
+                     <p className="leading-0 text-slate-800 flex gap-1 items-center">
+                        {missionName}
+                        <MissionStatusTag status={data.registerStatus} />
+                     </p>
+                     {data.mine && (
+                        <button
+                           onClick={() => {
+                              open({
+                                 content: <>삭제하시겠습니까?</>,
+                                 confirmEvent: () => {
+                                    deletePost(data.id);
+                                    close();
+                                 },
+                                 type: 'question',
+                              });
+                           }}
+                           className="py-1 px-2 rounded-md bg-red-100 text-sm"
+                        >
+                           삭제
+                        </button>
+                     )}
+                  </div>
                </div>
             </div>
             {isAdmin && (
