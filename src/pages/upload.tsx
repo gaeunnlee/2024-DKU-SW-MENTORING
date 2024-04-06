@@ -19,6 +19,7 @@ import { useNavigate } from 'react-router-dom';
 import imageCompression from 'browser-image-compression';
 import { useBottomSheet } from '../hooks/useBottomSheet';
 import { useToastStore } from '../stores/toast-stores';
+import { ToastContainer, toast } from 'react-toastify';
 
 interface IUpload {
    title: string;
@@ -34,6 +35,7 @@ export default function Upload() {
    const [missionId, setMissionId] = useState(0);
    const [missionName, setMissionName] = useState('');
    const [compressedFiles, setCompressedFiles] = useState<File[]>([new File([], '')]);
+   const [loading, setLoading] = useState(false);
    const [uploadData, setUploadData] = useState<IUpload>({
       title: '',
       body: '',
@@ -116,6 +118,7 @@ export default function Upload() {
       }
    };
    const handleSubmit = async () => {
+      setLoading(true);
       await post({
          api: '/post/mission-board',
          body: formData,
@@ -124,12 +127,29 @@ export default function Upload() {
       })
          .then(function () {
             navigate('/');
+            setLoading(false);
             setIsToastShow(true, '🎉 업로드 완료');
          })
          .catch(function (error: AxiosError) {
             console.log(error);
          });
    };
+   useEffect(() => {
+      loading &&
+         toast('🚀 업로드 중 ...', {
+            toastId: 'loading-toast',
+            autoClose: false,
+            position: 'bottom-center',
+            style: { marginBottom: '50px' },
+            hideProgressBar: true,
+            closeOnClick: true,
+            closeButton: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: 'light',
+         });
+   }, [loading]);
 
    useEffect(() => {
       missionId !== 0 &&
@@ -153,7 +173,8 @@ export default function Upload() {
                      setCompressedFiles([]);
                      setImages([]);
                   }}
-                  className="self-end absolute z-10 cursor-pointer bg-white shadow-lg rounded-full p-1"
+                  style={{ zIndex: 2 }}
+                  className="self-end absolute cursor-pointer bg-white shadow-lg rounded-full p-1"
                >
                   <AiOutlineDelete fontSize={'20px'} />
                </button>
@@ -217,6 +238,7 @@ export default function Upload() {
                <span className="slider round"></span>
             </label>
          </div>
+         {loading && <ToastContainer />}
          <Button
             onClick={() => {
                checkNull() &&

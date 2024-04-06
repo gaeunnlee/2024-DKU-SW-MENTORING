@@ -18,12 +18,12 @@ export const ToastContext = React.createContext({
 
 export default function ToastProvider({ children }: { children: ReactNode }) {
    const [toastState, setToastState] = useState<IToastState>();
-   const { isToastShow, toastContent, setIsToastShow } = useToastStore();
+   const { isToastShow, toastContent, duration, setIsToastShow } = useToastStore();
    useEffect(() => {
       if (isToastShow) {
          toast(toastContent, {
             position: 'bottom-center',
-            autoClose: 2000,
+            autoClose: duration === undefined ? 2000 : duration,
             style: { marginBottom: '50px' },
             hideProgressBar: true,
             closeOnClick: true,
@@ -35,7 +35,7 @@ export default function ToastProvider({ children }: { children: ReactNode }) {
             transition: Bounce,
          });
          setTimeout(() => {
-            setIsToastShow(false, '');
+            setIsToastShow(false, '', undefined);
          }, 2000);
       }
    }, [isToastShow]);
