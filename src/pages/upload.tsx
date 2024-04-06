@@ -148,14 +148,15 @@ export default function Upload() {
             />
          ) : (
             <>
-               <AiOutlineDelete
+               <button
                   onClick={() => {
                      setCompressedFiles([]);
                      setImages([]);
                   }}
-                  className="self-end absolute z-10 cursor-pointer"
-                  fontSize={'20px'}
-               />
+                  className="self-end absolute z-10 cursor-pointer bg-white shadow-lg rounded-full p-1"
+               >
+                  <AiOutlineDelete fontSize={'20px'} />
+               </button>
                <ImageList images={images} />
             </>
          )}
