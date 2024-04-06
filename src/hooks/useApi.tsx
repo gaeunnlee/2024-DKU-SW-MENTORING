@@ -18,13 +18,17 @@ export const useApi = () => {
    };
 
    const get = async ({ api, auth }: { api: string; auth?: boolean }) => {
-      const { data } = await client.get(api, {
-         headers: {
-            'Content-Type': 'application/json',
-            Authorization: auth ? `Bearer ${localStorage.getItem('accessToken')}` : null,
-         },
-      });
-      return data;
+      try {
+         const { data } = await client.get(api, {
+            headers: {
+               'Content-Type': 'application/json',
+               Authorization: auth ? `Bearer ${localStorage.getItem('accessToken')}` : null,
+            },
+         });
+         return data;
+      } catch (e) {
+         console.log(e);
+      }
    };
 
    const patch = async ({ api, body, type, auth }: { api: string; body?: unknown; type?: string; auth?: boolean }) => {

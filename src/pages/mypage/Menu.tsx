@@ -7,10 +7,13 @@ import { AiFillEdit } from 'react-icons/ai';
 import { MdFeedback, MdLaptopChromebook } from 'react-icons/md';
 import { useAuth } from '../../hooks/useAuth';
 import { useNavigate } from 'react-router-dom';
+import { useBottomSheet } from '../../hooks/useBottomSheet';
+import PasswordChange from './PasswordChange';
 
 export default function Menu() {
    const { open } = useModal();
    const { logout } = useAuth();
+   const { openSheet } = useBottomSheet();
    const navigate = useNavigate();
 
    const mypageMenu = [
@@ -29,7 +32,9 @@ export default function Menu() {
       {
          icon: FaKey,
          name: '비밀번호',
-         onClick: undefined,
+         onClick: () => {
+            openSheet({ content: <PasswordChange />, sheetName: 'password-sheet' });
+         },
       },
       {
          icon: AiFillEdit,

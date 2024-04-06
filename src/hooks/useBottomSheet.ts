@@ -14,5 +14,9 @@ export const useBottomSheet = () => {
       });
    };
 
-   return { openSheet };
+   const closeSheet = () => {
+      setIsSheetOpen(false);
+   };
+
+   return { openSheet, closeSheet };
 };
