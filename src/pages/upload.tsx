@@ -18,6 +18,7 @@ import { AxiosError } from 'axios';
 import { useNavigate } from 'react-router-dom';
 import imageCompression from 'browser-image-compression';
 import { useBottomSheet } from '../hooks/useBottomSheet';
+import { useToastStore } from '../stores/toast-stores';
 
 interface IUpload {
    title: string;
@@ -45,6 +46,7 @@ export default function Upload() {
    const navigate = useNavigate();
    const formData = new FormData();
    const { openSheet } = useBottomSheet();
+   const { setIsToastShow } = useToastStore();
 
    useEffect(() => {
       setUploadData((prev) => {
@@ -122,6 +124,7 @@ export default function Upload() {
       })
          .then(function () {
             navigate('/');
+            setIsToastShow(true, '🎉 업로드 완료');
          })
          .catch(function (error: AxiosError) {
             console.log(error);

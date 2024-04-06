@@ -11,7 +11,7 @@ export const useAuth = () => {
       localStorage.removeItem('accessToken');
       localStorage.removeItem('refreshToken');
       setIsAdmin(false);
-      navigate('/login');
+      navigate('/login', { state: { afterLogout: true } });
    };
 
    return {

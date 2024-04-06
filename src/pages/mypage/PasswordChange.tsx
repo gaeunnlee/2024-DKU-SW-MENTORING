@@ -4,6 +4,7 @@ import Button from '../../components/ui/Button';
 import { FaCheckCircle } from 'react-icons/fa';
 import { useApi } from '../../hooks/useApi';
 import { useBottomSheet } from '../../hooks/useBottomSheet';
+import { useToastStore } from '../../stores/toast-stores';
 
 interface INewPasswordValidation {
    isRegexValidate: undefined | boolean;
@@ -12,6 +13,7 @@ interface INewPasswordValidation {
 
 export default function PasswordChange() {
    const [pwInfo, setPwInfo] = useState({ password: '', newPassword: '' });
+   const { setIsToastShow } = useToastStore();
    const [validation, setValidation] = useState<INewPasswordValidation>({
       isRegexValidate: undefined,
       isSame: undefined,
@@ -45,16 +47,16 @@ export default function PasswordChange() {
       }
    };
 
-   const changePassword = (e: React.FormEvent<HTMLFormElement>) => {
+   const changePassword = async (e: React.FormEvent<HTMLFormElement>) => {
       e.preventDefault();
       if (pwInfo.password.length > 0 && validation.isRegexValidate && validation.isSame) {
          try {
-            patch({ api: '/user/change/password', auth: true, body: pwInfo }).then((response) => {
+            await patch({ api: '/user/change/password', auth: true, body: pwInfo }).then((response) => {
                closeSheet();
-               alert('변경되었습니다');
+               setIsToastShow(true, '👍🏻비밀번호 변경 완료');
             });
          } catch (e) {
-            alert('비밀번호가 틀렸습니다');
+            setIsToastShow(true, '기존 비밀번호가 알맞지 않습니다');
          }
       } else {
          alert('비밀번호를 다시 확인해주세요');

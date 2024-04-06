@@ -8,8 +8,9 @@ import { useModal } from '../hooks/useModal';
 import { useApi } from '../hooks/useApi';
 import axios, { AxiosError, AxiosResponse } from 'axios';
 import { IErrorResponse, IToken } from '../data/interface';
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { useAuth } from '../hooks/useAuth';
+import { useToastStore } from '../stores/toast-stores';
 
 export default function Login() {
    const [loginInfo, setLoginInfo] = useState({ studentId: '', password: '' });
@@ -17,7 +18,13 @@ export default function Login() {
    const { open } = useModal();
    const { post } = useApi();
    const { isLoggedIn } = useAuth();
+   const { setIsToastShow } = useToastStore();
+   const { state } = useLocation();
+
    useEffect(() => {
+      setTimeout(() => {
+         state.afterLogout && setIsToastShow(true, '로그아웃 완료');
+      }, 1000);
       isLoggedIn && navigate('/mypage');
    }, []);
 
@@ -28,6 +35,7 @@ export default function Login() {
             .then(function (data: IToken) {
                localStorage.setItem('accessToken', data.accessToken);
                localStorage.setItem('refreshToken', data.refreshToken);
+               setIsToastShow(true, '🎉로그인 성공');
                navigate('/mypage');
             })
             .catch(function (e: AxiosError) {
@@ -57,8 +65,7 @@ export default function Login() {
                   onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
                      setLoginInfo((prev) => ({
                         ...prev,
-                        studentId:
-                           checkInputRegex(e.target.value, 'number') ?? '',
+                        studentId: checkInputRegex(e.target.value, 'number') ?? '',
                      }));
                   }}
                   maxLength={8}

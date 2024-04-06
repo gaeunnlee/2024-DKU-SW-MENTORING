@@ -1,19 +1,23 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import Router from './Router';
 import styled from 'styled-components';
 import ModalProvider from './components/Modal/ModalProvider';
 import BottomSheetProvider from './components/BottomSheet/BottomSheetProvider';
+import ToastProvider from './components/Toast';
+import 'react-toastify/dist/ReactToastify.css';
 
 export default function App() {
    return (
       <BottomSheetProvider>
-         <ModalProvider>
-            <Wrapper>
-               <Container>
-                  <Router />
-               </Container>
-            </Wrapper>
-         </ModalProvider>
+         <ToastProvider>
+            <ModalProvider>
+               <Wrapper>
+                  <Container>
+                     <Router />
+                  </Container>
+               </Wrapper>
+            </ModalProvider>
+         </ToastProvider>
       </BottomSheetProvider>
    );
 }
