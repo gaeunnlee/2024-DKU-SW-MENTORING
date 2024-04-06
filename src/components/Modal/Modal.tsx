@@ -1,6 +1,7 @@
 import React, { ReactNode } from 'react';
 import styled from 'styled-components';
 import { useModal } from '../../hooks/useModal';
+import { motion, AnimatePresence } from 'framer-motion';
 
 export default function Modal({
    type,
@@ -21,31 +22,35 @@ export default function Modal({
                type === 'error' || close();
             }}
          >
-            <Container
-               onClick={(e: React.MouseEvent<HTMLDivElement>) => {
-                  e.stopPropagation();
-               }}
-            >
-               <Content>{content}</Content>
-               <ButtonContainer isMultiple={type === 'question'}>
-                  {type === 'question' && (
+            <AnimatePresence mode="wait">
+               <Container
+                  onClick={(e: React.MouseEvent<HTMLDivElement>) => {
+                     e.stopPropagation();
+                  }}
+                  initial={{ y: 10, opacity: 0 }}
+                  animate={{ y: 0, opacity: 1 }}
+                  exit={{ y: -10, opacity: 0 }}
+                  transition={{ duration: 0.2 }}
+               >
+                  <Content>{content}</Content>
+                  <ButtonContainer isMultiple={type === 'question'}>
+                     {type === 'question' && (
+                        <Button
+                           onClick={() => {
+                              close();
+                           }}
+                           value="취소"
+                        />
+                     )}
                      <Button
                         onClick={() => {
-                           close();
+                           type === 'question' && confirmEvent !== undefined ? confirmEvent() : close();
                         }}
-                        value="취소"
+                        value="확인"
                      />
-                  )}
-                  <Button
-                     onClick={() => {
-                        type === 'question' && confirmEvent !== undefined
-                           ? confirmEvent()
-                           : close();
-                     }}
-                     value="확인"
-                  />
-               </ButtonContainer>
-            </Container>
+                  </ButtonContainer>
+               </Container>
+            </AnimatePresence>
          </Overlay>
       </>
    );
@@ -73,7 +78,7 @@ const Overlay = styled.div`
       align-items: flex-end;
    }
 `;
-const Container = styled.div`
+const Container = styled(motion.div)`
    height: fit-content;
    box-sizing: border-box;
    border-radius: 10px;
