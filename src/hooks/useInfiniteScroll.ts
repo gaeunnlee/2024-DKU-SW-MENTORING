@@ -36,7 +36,7 @@ export const useInfiniteScroll = <T>({ api, itemPerPage }: { api: string; itemPe
             setFetchSuccess(false);
             get({
                api: API,
-               auth: true,
+               auth: api.indexOf('my') > 0 ? true : undefined,
             }).then(function (data) {
                if (data.content.length !== 0) {
                   setList((prev) => {
