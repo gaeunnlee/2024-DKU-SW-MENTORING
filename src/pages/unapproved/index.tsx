@@ -16,7 +16,6 @@ export default function UnapprovedPosts() {
          auth: true,
       }).then(function (data: IPostBoard) {
          setPosts(data.content);
-         console.log(data);
       });
       setIsPreviousVisible(true);
    }, []);

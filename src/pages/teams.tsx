@@ -14,7 +14,6 @@ export default function Teams() {
    useEffect(() => {
       get({ api: '/team?page=1&size=100' }).then(function (data: ITeamBoard) {
          setTeams(data.content);
-         console.log(data.content);
       });
       setIsPreviousVisible(true);
    }, []);

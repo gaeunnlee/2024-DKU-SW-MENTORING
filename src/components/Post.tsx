@@ -56,7 +56,6 @@ export default function Post({ data }: { data: IPost }) {
          if (method === 'accept') {
             score = prompt('보너스 점수만 입력해주세요 (없으면 입력 X)', '');
             if (score !== null) {
-               console.log(score);
                patchAcceptance();
             }
          } else {
