@@ -1,4 +1,4 @@
-import React, { useEffect, useLayoutEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import { useApi } from '../../hooks/useApi';
 import { INotice } from '../../data/interface';
@@ -21,10 +21,11 @@ export default function NoticeDetail() {
       setIsPreviousVisible(true);
    }, []);
 
-   useLayoutEffect(() => {
-      get({ api: `/notice/${noticeId}`, auth: true }).then((response) => {
-         setContent(response);
-      });
+   useEffect(() => {
+      noticeId.length > 0 &&
+         get({ api: `/notice/${noticeId}`, auth: true }).then((response) => {
+            setContent(response);
+         });
    }, [noticeId]);
 
    return (
