@@ -1,11 +1,6 @@
 import React, { useState } from 'react';
-import Input from '../../components/ui/Input';
 import Button from '../../components/ui/Button';
-import { useApi } from '../../hooks/useApi';
 import { useBottomSheet } from '../../hooks/useBottomSheet';
-import { useToastStore } from '../../stores/toast-stores';
-import { FaCheckCircle } from 'react-icons/fa';
-import { AxiosError } from 'axios';
 
 export default function Feedback() {
    const { closeSheet } = useBottomSheet();

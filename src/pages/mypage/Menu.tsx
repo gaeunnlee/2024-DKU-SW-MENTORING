@@ -12,6 +12,7 @@ import PasswordChange from './PasswordChange';
 import NicknameChange from './NicknameChange';
 import { useToastStore } from '../../stores/toast-stores';
 import Feedback from './Feedback';
+import Developers from './Developers';
 
 export default function Menu() {
    const { open } = useModal();
@@ -60,7 +61,7 @@ export default function Menu() {
          icon: MdLaptopChromebook,
          name: '제작',
          onClick: () => {
-            openSheet({ content: <></>, sheetName: 'develop-sheet' });
+            openSheet({ content: <Developers />, sheetName: 'develop-sheet' });
          },
       },
       {
