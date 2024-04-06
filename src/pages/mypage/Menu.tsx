@@ -11,6 +11,7 @@ import { useBottomSheet } from '../../hooks/useBottomSheet';
 import PasswordChange from './PasswordChange';
 import NicknameChange from './NicknameChange';
 import { useToastStore } from '../../stores/toast-stores';
+import Feedback from './Feedback';
 
 export default function Menu() {
    const { open } = useModal();
@@ -52,7 +53,7 @@ export default function Menu() {
          icon: MdFeedback,
          name: '피드백',
          onClick: () => {
-            openSheet({ content: <></>, sheetName: 'feedback-sheet' });
+            openSheet({ content: <Feedback />, sheetName: 'feedback-sheet' });
          },
       },
       {
