@@ -62,6 +62,7 @@ export interface ITeam {
    id: number;
    teamName: string;
    score: number;
+   members: string[];
 }
 
 export interface ITeamBoard extends IBoard {
