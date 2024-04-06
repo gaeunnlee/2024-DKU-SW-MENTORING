@@ -7,12 +7,14 @@ import Menu from './Menu';
 import TeamInfo from './TeamInfo';
 import { useRoleStore } from '../../stores/role-stores';
 import AdminMenu from './AdminMenu';
+import { useSheetStore } from '../../stores/sheet-stores';
 
 export default function MyPage() {
    const { get } = useApi();
    const [userInfo, setUserInfo] = useState<IUserInfo>();
    const [teamInfo, setTeamInfo] = useState<IMyTeam>();
    const { setRole, setIsAdmin } = useRoleStore();
+   const { isSheetOpen } = useSheetStore();
 
    useEffect(() => {
       get({ api: '/user', auth: true }).then(function (data: IUserInfo) {
@@ -21,6 +23,12 @@ export default function MyPage() {
          setIsAdmin(data.role === 'Admin');
       });
    }, []);
+
+   useEffect(() => {
+      get({ api: '/user', auth: true }).then(function (data: IUserInfo) {
+         setUserInfo(data);
+      });
+   }, [isSheetOpen]);
 
    useEffect(() => {
       if (userInfo?.admin === false) {

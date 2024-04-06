@@ -9,6 +9,7 @@ import { useAuth } from '../../hooks/useAuth';
 import { useNavigate } from 'react-router-dom';
 import { useBottomSheet } from '../../hooks/useBottomSheet';
 import PasswordChange from './PasswordChange';
+import NicknameChange from './NicknameChange';
 
 export default function Menu() {
    const { open } = useModal();
@@ -39,7 +40,9 @@ export default function Menu() {
       {
          icon: AiFillEdit,
          name: '닉네임',
-         onClick: undefined,
+         onClick: () => {
+            openSheet({ content: <NicknameChange />, sheetName: 'nickname-sheet' });
+         },
       },
       {
          icon: MdFeedback,
