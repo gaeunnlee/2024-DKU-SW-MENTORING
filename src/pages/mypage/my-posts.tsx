@@ -1,18 +1,18 @@
-import React, { useEffect, useState } from 'react';
-import { useNavStore } from '../../stores/nav-stores';
-import UserPosts from './userPosts';
+import React from 'react';
 import Layout from '../../components/Layout';
+import Post from '../../components/Post';
+import { IPost } from '../../data/interface';
+import BoardLayout from '../../components/BoardLayout';
 
 export default function MyPosts() {
-   const { setIsPreviousVisible } = useNavStore();
-
-   useEffect(() => {
-      setIsPreviousVisible(true);
-   }, []);
-
+   const Cell = ({ data }: { data: IPost }) => <Post key={data.id} data={data} />;
    return (
       <Layout>
-         <UserPosts />
+         <BoardLayout<IPost>
+            api="/post/mission-board/my?sort=id,desc"
+            setCell={(data: IPost) => <Cell data={data} />}
+            option={{ itemPerPage: 2 }}
+         />
       </Layout>
    );
 }

@@ -14,7 +14,7 @@ import { ButtonNameByMissionStatus, TagInfoByMissionStatus } from '../data/missi
 import { TMissionStatus } from '../data/type';
 import { useModal } from '../hooks/useModal';
 import { AxiosError } from 'axios';
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { useToastStore } from '../stores/toast-stores';
 
 const Container = styled.div`
@@ -32,6 +32,7 @@ export default function Post({ data }: { data: IPost }) {
    const { open, close } = useModal();
    const navigate = useNavigate();
    const { setIsToastShow } = useToastStore();
+   const { pathname } = useLocation();
 
    useEffect(() => {
       getMission(data.missionId).then(function (data: IMission) {
@@ -91,7 +92,6 @@ export default function Post({ data }: { data: IPost }) {
    const deletePost = async (id: number) => {
       await axiosDelete({ api: `/post/mission-board/${id}`, auth: true })
          .then((response) => {
-            navigate(-1);
             setIsToastShow(true, '⚒️ 삭제 완료');
          })
          .catch((e: AxiosError) => {
@@ -112,7 +112,7 @@ export default function Post({ data }: { data: IPost }) {
                         {missionName}
                         <MissionStatusTag status={data.registerStatus} />
                      </p>
-                     {data.mine && (
+                     {pathname === '/my-posts' && (
                         <button
                            onClick={() => {
                               open({
