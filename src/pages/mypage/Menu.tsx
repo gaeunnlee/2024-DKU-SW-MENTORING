@@ -10,12 +10,14 @@ import { useNavigate } from 'react-router-dom';
 import { useBottomSheet } from '../../hooks/useBottomSheet';
 import PasswordChange from './PasswordChange';
 import NicknameChange from './NicknameChange';
+import { useToastStore } from '../../stores/toast-stores';
 
 export default function Menu() {
    const { open } = useModal();
    const { logout } = useAuth();
    const { openSheet } = useBottomSheet();
    const navigate = useNavigate();
+   const { setIsToastShow } = useToastStore();
 
    const mypageMenu = [
       {
@@ -28,7 +30,9 @@ export default function Menu() {
       {
          icon: FaRankingStar,
          name: '랭킹',
-         onClick: undefined,
+         onClick: () => {
+            setIsToastShow(true, '⚠️ 행사 종료 후 공개 예정');
+         },
       },
       {
          icon: FaKey,
@@ -47,12 +51,16 @@ export default function Menu() {
       {
          icon: MdFeedback,
          name: '피드백',
-         onClick: undefined,
+         onClick: () => {
+            openSheet({ content: <></>, sheetName: 'feedback-sheet' });
+         },
       },
       {
          icon: MdLaptopChromebook,
          name: '제작',
-         onClick: undefined,
+         onClick: () => {
+            openSheet({ content: <></>, sheetName: 'develop-sheet' });
+         },
       },
       {
          icon: FaPowerOff,
