@@ -9,7 +9,7 @@ export default function MyPosts() {
    return (
       <Layout>
          <BoardLayout<IPost>
-            api="/post/mission-board/my?sort=id,desc"
+            api="/post/mission-board/my-team?sort=id,desc"
             setCell={(data: IPost) => <Cell data={data} />}
             option={{ itemPerPage: 2 }}
          />
