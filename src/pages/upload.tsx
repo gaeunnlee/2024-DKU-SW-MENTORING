@@ -33,6 +33,7 @@ export default function Upload() {
    const [images, setImages] = useState<string[]>([]);
    const { open, close } = useModal();
    const [missionId, setMissionId] = useState(0);
+   const [isBonusButtonShow, setIsBonusButtonShow] = useState(false);
    const [missionName, setMissionName] = useState('');
    const [compressedFiles, setCompressedFiles] = useState<File[]>([new File([], '')]);
    const [loading, setLoading] = useState(false);
@@ -155,7 +156,15 @@ export default function Upload() {
       missionId !== 0 &&
          getMission(missionId).then(function (data: IMission) {
             setMissionName(data.name);
+            console.log(data);
+            setIsBonusButtonShow(data.bonusMissionList.length > 0);
          });
+      setUploadData((prev) => {
+         return {
+            ...prev,
+            isBonusMissionSuccessful: false,
+         };
+      });
    }, [missionId]);
 
    return (
@@ -218,26 +227,28 @@ export default function Upload() {
                <IoChevronForward />
             </div>
          </div>
-         <div className="mt-5 flex justify-between px-4 text-[14px] items-center">
-            <span className="flex items-center gap-1">
-               <TbHeartPlus fontSize={'20px'} />
-               보너스 미션 수행
-            </span>
-            <label className="switch">
-               <input
-                  type="checkbox"
-                  onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-                     setUploadData((prev) => {
-                        return {
-                           ...prev,
-                           isBonusMissionSuccessful: e.target.checked,
-                        };
-                     });
-                  }}
-               />
-               <span className="slider round"></span>
-            </label>
-         </div>
+         {isBonusButtonShow && (
+            <div className="mt-5 flex justify-between px-4 text-[14px] items-center">
+               <span className="flex items-center gap-1">
+                  <TbHeartPlus fontSize={'20px'} />
+                  보너스 미션 수행
+               </span>
+               <label className="switch">
+                  <input
+                     type="checkbox"
+                     onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                        setUploadData((prev) => {
+                           return {
+                              ...prev,
+                              isBonusMissionSuccessful: e.target.checked,
+                           };
+                        });
+                     }}
+                  />
+                  <span className="slider round"></span>
+               </label>
+            </div>
+         )}
          {loading && <ToastContainer />}
          <Button
             onClick={() => {

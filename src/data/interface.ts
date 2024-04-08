@@ -27,6 +27,7 @@ export interface IMission {
    difficulty: string;
    missionStatus: string;
    bonusMission: IBonusMission[];
+   bonusMissionList: IBonusMission[];
 }
 
 export interface IBonusMission {
