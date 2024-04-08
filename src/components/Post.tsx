@@ -60,7 +60,7 @@ export default function Post({ data }: { data: IPost }) {
             });
          };
          if (method === 'accept') {
-            score = prompt('보너스 점수만 입력해주세요 (없으면 입력 X)', '');
+            score = prompt('연합 추가 점수만 입력해주세요 (없으면 입력 X)', '');
             if (score !== null) {
                patchAcceptance();
             }
