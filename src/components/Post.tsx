@@ -140,7 +140,7 @@ export default function Post({ data }: { data: IPost }) {
                         missionId: data.id,
                      });
                   }}
-                  className="p-2 bg-black text-white rounded-md"
+                  className="p-2 bg-black text-white rounded-md whitespace-nowrap"
                >
                   {ButtonNameByMissionStatus[data.registerStatus]}
                </button>
