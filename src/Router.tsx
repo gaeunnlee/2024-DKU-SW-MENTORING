@@ -15,6 +15,7 @@ import PostDetail from './pages/post-detail';
 import NoticeDetail from './pages/notice/detail';
 import MyPosts from './pages/mypage/my-posts';
 import UnapprovedPosts from './pages/unapproved';
+import NoticeUpload from './pages/notice/upload';
 
 export default function Router() {
    return (
@@ -52,6 +53,7 @@ export default function Router() {
             <Route path={route['unapproved-posts'].pathname} element={<UnapprovedPosts />} />
             <Route path={route.teams.pathname} element={<Teams />} />
             <Route path={route.notice.pathname} element={<Notice />} />
+            <Route path={route['notice-upload'].pathname} element={<NoticeUpload />} />
             <Route
                path={route.noticeDetail.pathname}
                element={

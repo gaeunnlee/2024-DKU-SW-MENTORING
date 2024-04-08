@@ -40,6 +40,11 @@ export const route = {
       name: '공지',
       pathname: '/notice',
    },
+   'notice-upload': {
+      id: '공지 작성',
+      name: '공지 작성',
+      pathname: '/notice-upload',
+   },
    noticeDetail: {
       id: '공지상세',
       name: '공지상세',
