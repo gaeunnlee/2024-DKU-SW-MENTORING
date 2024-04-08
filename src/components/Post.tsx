@@ -84,9 +84,15 @@ export default function Post({ data }: { data: IPost }) {
    };
 
    const MissionStatusTag = ({ status }: { status: TMissionStatus }) => (
-      <span className={`py-[0.1rem] px-[0.4rem] rounded-md text-sm ${TagInfoByMissionStatus[status].color}`}>
+      <span
+         className={`whitespace-nowrap py-[0.1rem] px-[0.4rem] rounded-md text-sm ${TagInfoByMissionStatus[status].color}`}
+      >
          {TagInfoByMissionStatus[status].name}
       </span>
+   );
+
+   const BonusStatusTag = () => (
+      <span className="whitespace-nowrap py-[0.1rem] px-[0.4rem] rounded-md text-sm bg-blue-200">보너스</span>
    );
 
    const deletePost = async (id: number) => {
@@ -109,7 +115,8 @@ export default function Post({ data }: { data: IPost }) {
 
                   <div className="flex justify-between w-full">
                      <p className="leading-0 text-slate-800 flex gap-1 items-center">
-                        {missionName}
+                        <span className="whitespace-nowrap w-[200px] text-ellipsis overflow-hidden">{missionName}</span>
+                        {data.bonusMissionSuccessful && <BonusStatusTag />}
                         <MissionStatusTag status={data.registerStatus} />
                      </p>
                      {pathname === '/my-posts' && (
@@ -132,22 +139,23 @@ export default function Post({ data }: { data: IPost }) {
                   </div>
                </div>
             </div>
-            {isAdmin && (
-               <button
-                  onClick={(e) => {
-                     handleMissionByAdmin({
-                        eventTarget: e.currentTarget,
-                        missionId: data.id,
-                     });
-                  }}
-                  className="p-2 bg-black text-white rounded-md whitespace-nowrap"
-               >
-                  {ButtonNameByMissionStatus[data.registerStatus]}
-               </button>
-            )}
          </div>
          <div>
             <Carousel data={data.images} />
+            <AdminButtonContainer className="flex w-full justify-end">
+               {isAdmin && (
+                  <AdminButton
+                     onClick={(e) => {
+                        handleMissionByAdmin({
+                           eventTarget: e.currentTarget,
+                           missionId: data.id,
+                        });
+                     }}
+                  >
+                     {ButtonNameByMissionStatus[data.registerStatus]}
+                  </AdminButton>
+               )}
+            </AdminButtonContainer>
          </div>
          <div className="flex flex-col gap-1 mt-5 ml-2">
             <div className="flex gap-2">
@@ -179,3 +187,16 @@ export default function Post({ data }: { data: IPost }) {
       </Container>
    );
 }
+const AdminButtonContainer = styled.div`
+   position: sticky;
+   margin-top: -30px;
+   margin-left: -5px;
+   z-index: 3;
+`;
+const AdminButton = styled.button`
+   background-color: black;
+   color: white;
+   border-radius: 5px;
+   white-space: nowrap;
+   padding: 5px;
+`;
