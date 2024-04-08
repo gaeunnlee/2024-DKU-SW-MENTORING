@@ -156,7 +156,6 @@ export default function Upload() {
       missionId !== 0 &&
          getMission(missionId).then(function (data: IMission) {
             setMissionName(data.name);
-            console.log(data);
             setIsBonusButtonShow(data.bonusMissionList.length > 0);
          });
       setUploadData((prev) => {
