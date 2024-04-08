@@ -4,8 +4,8 @@ import styled from 'styled-components';
 import { FaRegComment } from 'react-icons/fa';
 import { MdOutlineDateRange } from 'react-icons/md';
 import { AiOutlineNotification } from 'react-icons/ai';
-import { useApi } from '../../hooks/useApi';
 import { useNavigate } from 'react-router-dom';
+import parse from 'html-react-parser';
 
 export default function NoticePost({
    data: { id, title, author, body, images, files, commentCount, createdAt },
@@ -26,7 +26,7 @@ export default function NoticePost({
                <AiOutlineNotification />
                {title}
             </p>
-            <p className={`text-zinc-700 ${detail || 'line-clamp-1'}`}>{detail ? detail.body : body}</p>
+            <div className="text-zinc-700 line-clamp-1">{parse(body)}</div>
          </div>
          <div className="flex justify-between text-zinc-500 text-sm items-center">
             <p className=" bg-zinc-100 px-3 rounded-full ">{author}</p>
