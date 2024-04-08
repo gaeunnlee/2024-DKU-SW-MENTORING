@@ -9,6 +9,7 @@ import { FaRegComment } from 'react-icons/fa';
 import Comment from '../../components/Comment';
 import { useNavStore } from '../../stores/nav-stores';
 import parse from 'html-react-parser';
+import Carousel from '../../components/Carousel/Carousel';
 
 export default function NoticeDetail() {
    const { pathname } = useLocation();
@@ -47,6 +48,7 @@ export default function NoticeDetail() {
                <p className="flex gap-1 items-center text-zinc-900 font-bold mt-2">{content?.title}</p>
 
                <p className="text-zinc-700">{parse(content?.body ?? '')}</p>
+               {content?.images && content.images.length > 0 && <Carousel data={content.images} />}
             </div>
          </Container>
          <CommentContainer>
