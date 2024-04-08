@@ -6,13 +6,14 @@ import { difficulty } from '../../data/enum';
 import { useModal } from '../../hooks/useModal';
 import { IMission } from '../../data/interface';
 import MissionDetail from './detail';
-import { useApi } from '../../hooks/useApi';
 import { difficultyList } from '../../data/difficultyList';
 import HorizontalScrollBox from '../../components/HorizontalScrollBox';
 import { SwiperSlide } from 'swiper/react';
 import { useLayoutScrollStore } from '../../stores/layout-scroll-stores';
 import BoardLayout from '../../components/BoardLayout';
 import { useSheetStore } from '../../stores/sheet-stores';
+import { FaSearch } from 'react-icons/fa';
+import { useDebounce } from '../../hooks/useDebounce';
 
 export default function Missions({
    selectMode,
@@ -21,18 +22,28 @@ export default function Missions({
    selectMode?: boolean;
    passMissionId?: (id: number) => void;
 }) {
-   const [missions, setMissions] = useState<IMission[]>();
-   const [filteredDifficulty, setFilteredDifficulty] = useState('');
-   const [hasBonusMission, setHasBonusMission] = useState<boolean>();
+   const [filteredDifficulty, setFilteredDifficulty] = useState<string | undefined>('');
+   const [hasBonusMission, setHasBonusMission] = useState<boolean | undefined>();
+   const [isSearchMode, setIsSearchMode] = useState(false);
+   const [searchKeyword, setSearchKeyword] = useState('');
    const [api, setApi] = useState('');
-   const { open, close } = useModal();
+   const { open } = useModal();
    const { setIsSheetOpen } = useSheetStore();
+   const debouncedQuery = useDebounce(searchKeyword, 500);
 
    const { setIsScrollTop } = useLayoutScrollStore();
 
-   const handleMissionApi = ({ difficulty, hasBonusMission }: { difficulty?: string; hasBonusMission?: boolean }) => {
+   const handleMissionApi = ({
+      difficulty,
+      hasBonusMission,
+      searchKeyword,
+   }: {
+      difficulty?: string;
+      hasBonusMission?: boolean;
+      searchKeyword?: string;
+   }) => {
       setApi(
-         `/mission?sort=id,asc&${hasBonusMission ? `hasBonusMission=${hasBonusMission}` : ''}${difficulty ? `&difficulty=${filteredDifficulty}` : ''}`
+         `/mission?sort=id,asc${hasBonusMission ? `&hasBonusMission=${hasBonusMission}` : ''}${difficulty ? `&difficulty=${filteredDifficulty}` : ''}${searchKeyword ? `&keyword=${searchKeyword}` : ''}`
       );
    };
 
@@ -103,12 +114,29 @@ export default function Missions({
    );
 
    useEffect(() => {
+      if (isSearchMode) {
+         setHasBonusMission(undefined);
+         setFilteredDifficulty(undefined);
+      } else {
+         handleMissionApi({});
+         setSearchKeyword('');
+      }
+   }, [isSearchMode]);
+
+   useEffect(() => {
+      handleMissionApi({
+         searchKeyword: debouncedQuery,
+      });
+   }, [debouncedQuery]);
+
+   useEffect(() => {
       if (filteredDifficulty === '' && hasBonusMission === false) {
          handleMissionApi({});
       } else {
          handleMissionApi({
             hasBonusMission: hasBonusMission,
             difficulty: filteredDifficulty,
+            searchKeyword: '',
          });
       }
    }, [hasBonusMission, filteredDifficulty]);
@@ -116,37 +144,62 @@ export default function Missions({
    return (
       <Layout className="w-full overscroll" style={{ padding: 0, height: 'calc(100dvh - 60px)' }}>
          <FilterContainer className="flex gap-2 sticky top-0 bg-white p-3">
-            <label className=" cursor-pointer bg-zinc-100 px-3 py-1 text-zinc-500 rounded-full flex whitespace-nowrap">
+            <label className="cursor-pointer bg-zinc-100 px-3 py-1 text-zinc-500 rounded-full flex whitespace-nowrap">
                <input
                   className="hidden"
                   type="checkbox"
-                  onChange={(e) => {
-                     filterBonusMission(e);
+                  onClick={(e) => {
+                     e.currentTarget.parentElement!.classList.toggle('checked');
+                     setIsSearchMode((prev) => !prev);
                   }}
                />
-               보너스
+               <FaSearch />
             </label>
-            <HorizontalScrollBox>
-               {difficultyList.map(({ id, name }) => (
-                  <SwiperSlide
-                     key={id}
-                     id={id}
-                     className="difficulty cursor-pointer bg-zinc-100 px-4 py-1 text-zinc-500 rounded-full"
-                     onClick={(e) => {
-                        filterMissionsByDifficulty(e);
-                     }}
-                  >
-                     {name}
-                  </SwiperSlide>
-               ))}
-            </HorizontalScrollBox>
+            {isSearchMode && (
+               <input
+                  className="w-full"
+                  type="text"
+                  placeholder="검색어를 입력해주세요"
+                  value={searchKeyword}
+                  onChange={(e) => {
+                     setSearchKeyword(e.target.value);
+                  }}
+               />
+            )}
+            {isSearchMode || (
+               <>
+                  <label className="cursor-pointer bg-zinc-100 px-3 py-1 text-zinc-500 rounded-full flex whitespace-nowrap">
+                     <input
+                        className="hidden"
+                        type="checkbox"
+                        onChange={(e) => {
+                           filterBonusMission(e);
+                        }}
+                     />
+                     보너스
+                  </label>
+                  <HorizontalScrollBox>
+                     {difficultyList.map(({ id, name }) => (
+                        <SwiperSlide
+                           key={id}
+                           id={id}
+                           className="difficulty cursor-pointer bg-zinc-100 px-4 py-1 text-zinc-500 rounded-full"
+                           onClick={(e) => {
+                              filterMissionsByDifficulty(e);
+                           }}
+                        >
+                           {name}
+                        </SwiperSlide>
+                     ))}
+                  </HorizontalScrollBox>
+               </>
+            )}
          </FilterContainer>
          <BoardLayout<IMission>
             option={{ itemPerPage: 10 }}
             api={api}
             setCell={(data: IMission) => <Cell data={data} />}
          />
-         <div className="h-[80dvh] px-3 pb-[60px] mb-[30px]"></div>
       </Layout>
    );
 }
