@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { ReactNode } from 'react';
 import { AiFillPicture } from 'react-icons/ai';
 import styled from 'styled-components';
 
@@ -20,25 +20,48 @@ const ImageLabel = styled.label`
 `;
 export default function ImageButton({
    onChange,
+   customizedLabel,
 }: {
    onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+   customizedLabel?: {
+      labelStyle: string;
+      content: ReactNode;
+   };
 }) {
    return (
-      <div className="flex justify-center">
-         <ImageLabel htmlFor="input-file" className="flex items-center gap-3">
-            <input
-               type="file"
-               id="input-file"
-               multiple
-               onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-                  onChange(e);
-               }}
-               className="hidden"
-               accept="image/png, image/jpeg"
-            />
-            <AiFillPicture style={{ fontSize: '35px' }} />
-            <span>이미지 업로드</span>
-         </ImageLabel>
-      </div>
+      <>
+         {customizedLabel ? (
+            <label className={customizedLabel.labelStyle}>
+               <input
+                  type="file"
+                  id="input-file"
+                  multiple
+                  onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                     onChange(e);
+                  }}
+                  className="hidden"
+                  accept="image/png, image/jpeg"
+               />
+               {customizedLabel.content}
+            </label>
+         ) : (
+            <div className="flex justify-center">
+               <ImageLabel htmlFor="input-file" className="flex items-center gap-3">
+                  <input
+                     type="file"
+                     id="input-file"
+                     multiple
+                     onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                        onChange(e);
+                     }}
+                     className="hidden"
+                     accept="image/png, image/jpeg"
+                  />
+                  <AiFillPicture style={{ fontSize: '35px' }} />
+                  <span>이미지 업로드</span>
+               </ImageLabel>
+            </div>
+         )}
+      </>
    );
 }
