@@ -70,8 +70,8 @@ export default function Upload() {
       setCompressedFiles([]);
       const files = Array.from(e.target.files || []);
       const options = {
-         maxSizeMB: 0.5,
-         maxWidthOrHeight: 1024,
+         maxSizeMB: 0.7,
+         maxWidthOrHeight: 2048,
          useWebWorker: true,
       };
       const compressedFilesTemp: File[] = [];
