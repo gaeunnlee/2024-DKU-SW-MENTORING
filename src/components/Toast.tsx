@@ -24,14 +24,14 @@ export default function ToastProvider({ children }: { children: ReactNode }) {
          toast(toastContent, {
             position: 'bottom-center',
             autoClose: duration === undefined ? 2000 : duration,
-            style: { marginBottom: '50px' },
+            style: {},
             hideProgressBar: true,
             closeOnClick: true,
-            closeButton: true,
+            closeButton: false,
             pauseOnHover: true,
             draggable: true,
             progress: undefined,
-            theme: 'light',
+            theme: 'dark',
             transition: Bounce,
          });
          setTimeout(() => {

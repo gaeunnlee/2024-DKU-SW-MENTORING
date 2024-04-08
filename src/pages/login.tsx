@@ -35,7 +35,7 @@ export default function Login() {
             .then(function (data: IToken) {
                localStorage.setItem('accessToken', data.accessToken);
                localStorage.setItem('refreshToken', data.refreshToken);
-               setIsToastShow(true, '🎉로그인 성공');
+               setIsToastShow(true, '🎉 로그인 성공');
                navigate('/mypage');
             })
             .catch(function (e: AxiosError) {

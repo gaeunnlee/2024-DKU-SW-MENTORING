@@ -25,6 +25,29 @@ html {
    font-size: 13px;
 }
 
+/* React-Toastify */
+.Toastify__toast-container {
+   display: flex;
+   justify-content: center;
+   padding: 0;
+}
+
+.Toastify__toast {
+   padding: 0;
+   height: 30px;
+   min-height: 30px;
+   border-radius: 30px;
+   background-color: #00000080;
+   text-align: center;
+   width: fit-content;
+   margin-bottom: 90px;
+   padding: 0 10px;
+}
+.Toastify__toast-body {
+   padding: 0 !important;
+   height: 20px !important;
+}
+
 /* React Spring Bottom Sheet */
 div[aria-modal='true'] {
    justify-self: center;
