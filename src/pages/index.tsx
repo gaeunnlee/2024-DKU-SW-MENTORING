@@ -7,7 +7,7 @@ import BoardLayout from '../components/BoardLayout';
 export default function Index() {
    const Cell = ({ data }: { data: IPost }) => <Post key={data.id} data={data} />;
    return (
-      <Layout className="flex flex-col gap-9">
+      <Layout>
          <BoardLayout<IPost> api="/post/mission-board?sort=id,desc" setCell={(data: IPost) => <Cell data={data} />} />
       </Layout>
    );

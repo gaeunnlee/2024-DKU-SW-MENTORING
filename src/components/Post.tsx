@@ -20,6 +20,7 @@ import { useToastStore } from '../stores/toast-stores';
 const Container = styled.div`
    display: flex;
    flex-direction: column;
+   margin-bottom: 10px;
 `;
 
 export default function Post({ data }: { data: IPost }) {
@@ -143,8 +144,8 @@ export default function Post({ data }: { data: IPost }) {
          </div>
          <div>
             <Carousel data={data.images} />
-            <AdminButtonContainer className="flex w-full justify-end">
-               {isAdmin && (
+            {isAdmin && (
+               <AdminButtonContainer className="flex w-full justify-end">
                   <AdminButton
                      onClick={(e) => {
                         handleMissionByAdmin({
@@ -155,10 +156,10 @@ export default function Post({ data }: { data: IPost }) {
                   >
                      {ButtonNameByMissionStatus[data.registerStatus]}
                   </AdminButton>
-               )}
-            </AdminButtonContainer>
+               </AdminButtonContainer>
+            )}
          </div>
-         <div className="flex flex-col gap-1 mt-5 ml-2">
+         <div className="flex flex-col gap-1 mt-3 ml-2">
             <div className="flex gap-2">
                <span className="text-blue-700">#{data.title}</span>{' '}
             </div>
