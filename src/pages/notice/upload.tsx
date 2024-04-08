@@ -10,6 +10,7 @@ import ImageButton from '../../components/ImageButton';
 import ImageList from '../../components/ImageList';
 import imageCompression from 'browser-image-compression';
 import { FaCamera, FaTrash } from 'react-icons/fa';
+import { useToastStore } from '../../stores/toast-stores';
 export default function NoticeUpload() {
    const editorRef = useRef<Editor>(null);
    const [title, setTitle] = useState('');
@@ -19,20 +20,25 @@ export default function NoticeUpload() {
    const [images, setImages] = useState(['']);
    const [compressedFiles, setCompressedFiles] = useState<File[]>([new File([], '')]);
    const formData = new FormData();
+   const { setIsToastShow } = useToastStore();
 
    const uploadNotice = async () => {
-      await post({
-         api: '/notice',
-         type: 'multipart/form-data',
-         auth: true,
-         body: formData,
-      })
-         .then((response: { id: number }) => {
-            navigate(`/notice/${response.id}`);
+      if (title.length > 0 && body.length > 0) {
+         await post({
+            api: '/notice',
+            type: 'multipart/form-data',
+            auth: true,
+            body: formData,
          })
-         .catch((e) => {
-            console.log(e);
-         });
+            .then((response: { id: number }) => {
+               navigate(`/notice/${response.id}`);
+            })
+            .catch((e) => {
+               console.log(e);
+            });
+      } else {
+         setIsToastShow(true, '😅 제목과 내용을 입력해주세요');
+      }
    };
    const handleImages = (e: React.ChangeEvent<HTMLInputElement>) => {
       setImages([]);
