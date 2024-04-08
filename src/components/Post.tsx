@@ -112,30 +112,31 @@ export default function Post({ data }: { data: IPost }) {
                <HiUserCircle style={{ fontSize: '40px', color: '#ddd' }} />
                <div className="flex flex-col w-full">
                   <p className="leading-0 text-[0.9rem]">{data.author}</p>
-
                   <div className="flex justify-between w-full">
-                     <p className="leading-0 text-slate-800 flex gap-1 items-center">
-                        <span className="whitespace-nowrap w-[200px] text-ellipsis overflow-hidden">{missionName}</span>
-                        {data.bonusMissionSuccessful && <BonusStatusTag />}
-                        <MissionStatusTag status={data.registerStatus} />
-                     </p>
-                     {pathname === '/my-posts' && (
-                        <button
-                           onClick={() => {
-                              open({
-                                 content: <>삭제하시겠습니까?</>,
-                                 confirmEvent: () => {
-                                    deletePost(data.id);
-                                    close();
-                                 },
-                                 type: 'question',
-                              });
-                           }}
-                           className="py-1 px-2 rounded-md bg-red-100 text-sm"
-                        >
-                           삭제
-                        </button>
-                     )}
+                     <div className="leading-0 text-slate-800 flex gap-1 items-center justify-between w-full">
+                        <span className="whitespace-nowrap w-[220px] text-ellipsis overflow-hidden">{missionName}</span>
+                        <div className="flex gap-1">
+                           {data.bonusMissionSuccessful && <BonusStatusTag />}
+                           <MissionStatusTag status={data.registerStatus} />
+                           {pathname === '/my-posts' && (
+                              <button
+                                 onClick={() => {
+                                    open({
+                                       content: <>삭제하시겠습니까?</>,
+                                       confirmEvent: () => {
+                                          deletePost(data.id);
+                                          close();
+                                       },
+                                       type: 'question',
+                                    });
+                                 }}
+                                 className="py-[0.1rem] px-[0.4rem] rounded-md bg-red-100 text-sm whitespace-nowrap"
+                              >
+                                 삭제
+                              </button>
+                           )}
+                        </div>
+                     </div>
                   </div>
                </div>
             </div>
