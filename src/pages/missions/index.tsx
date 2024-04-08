@@ -15,10 +15,10 @@ import BoardLayout from '../../components/BoardLayout';
 import { useSheetStore } from '../../stores/sheet-stores';
 
 export default function Missions({
-   searchMode,
+   selectMode,
    passMissionId,
 }: {
-   searchMode?: boolean;
+   selectMode?: boolean;
    passMissionId?: (id: number) => void;
 }) {
    const [missions, setMissions] = useState<IMission[]>();
@@ -77,7 +77,7 @@ export default function Missions({
    const Cell = ({ data }: { data: IMission }) => (
       <Box
          onClick={() => {
-            if (searchMode) {
+            if (selectMode) {
                setIsSheetOpen(false);
                passMissionId !== undefined && passMissionId(data.id);
             } else {

@@ -10,7 +10,7 @@ import { IoChevronForward } from 'react-icons/io5';
 import { TbHeartPlus } from 'react-icons/tb';
 import Button from '../components/ui/Button';
 import { useModal } from '../hooks/useModal';
-import SearchMission from './missions/search';
+import SelectMission from './missions/select';
 import { getMission } from '../utils/getMission';
 import { IFile, IMission } from '../data/interface';
 import { useApi } from '../hooks/useApi';
@@ -203,7 +203,7 @@ export default function Upload() {
          <hr />
          <div
             onClick={() => {
-               openSheet({ sheetName: 'mission-sheet', content: <SearchMission setMissionId={setMissionId} /> });
+               openSheet({ sheetName: 'mission-sheet', content: <SelectMission setMissionId={setMissionId} /> });
             }}
             className="mt-5 flex justify-between px-4 cursor-pointer text-[14px] items-center"
          >
