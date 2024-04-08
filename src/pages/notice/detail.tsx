@@ -36,7 +36,7 @@ export default function NoticeDetail() {
                   <p className=" bg-zinc-100 px-3 rounded-full ">{content?.author}</p>
                   <div className="flex gap-1 items-center text-sm">
                      <MdOutlineDateRange className="text-zinc-500 text-[1.2rem]" />
-                     2024.03.26
+                     {content?.createdAt.slice(0, 10)}
                   </div>
                   <div className="flex gap-1 items-center text-sm">
                      <FaRegComment className="text-zinc-500" />

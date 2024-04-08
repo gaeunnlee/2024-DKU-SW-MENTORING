@@ -105,6 +105,7 @@ export interface INotice {
    images: IFile[];
    files: IFile[];
    commentCount: number;
+   createdAt: string;
 }
 
 export interface INoticeDetail extends INotice {

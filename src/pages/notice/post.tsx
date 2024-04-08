@@ -8,21 +8,13 @@ import { useApi } from '../../hooks/useApi';
 import { useNavigate } from 'react-router-dom';
 
 export default function NoticePost({
-   data: { id, title, author, body, images, files, commentCount },
+   data: { id, title, author, body, images, files, commentCount, createdAt },
 }: {
    data: INotice;
 }) {
    const [detail, setDetail] = useState<INoticeDetail>();
-   const { get } = useApi();
    const navigate = useNavigate();
 
-   const fetchPost = (id: number) => {
-      get({ api: `/notice/${id}`, auth: true }).then(
-         (response: INoticeDetail) => {
-            setDetail(response);
-         }
-      );
-   };
    return (
       <Container
          onClick={() => {
@@ -34,15 +26,13 @@ export default function NoticePost({
                <AiOutlineNotification />
                {title}
             </p>
-            <p className={`text-zinc-700 ${detail || 'line-clamp-1'}`}>
-               {detail ? detail.body : body}
-            </p>
+            <p className={`text-zinc-700 ${detail || 'line-clamp-1'}`}>{detail ? detail.body : body}</p>
          </div>
          <div className="flex justify-between text-zinc-500 text-sm items-center">
             <p className=" bg-zinc-100 px-3 rounded-full ">{author}</p>
             <div className="flex gap-1 items-center text-sm">
                <MdOutlineDateRange className="text-zinc-500 text-[1.2rem]" />
-               2024.03.26
+               {createdAt.slice(0, 10)}
             </div>
             <div className="flex gap-1 items-center text-sm">
                <FaRegComment className="text-zinc-500" />
