@@ -1,7 +1,6 @@
 import React, { useRef, useState } from 'react';
-
+import '../../styles/toast-ui-editor.css';
 import { Editor } from '@toast-ui/react-editor';
-import '@toast-ui/editor/toastui-editor.css';
 import Input from '../../components/ui/Input';
 import Layout from '../../components/Layout';
 import Button from '../../components/ui/Button';
