@@ -76,6 +76,7 @@ export default function Upload() {
          useWebWorker: true,
       };
       const compressedFilesTemp: File[] = [];
+      setIsToastShow(true, '⚒️ 이미지 압축 중...', false);
       files.forEach(async (f) => {
          setImages((prev) => {
             return [...prev, URL.createObjectURL(f)];
@@ -89,6 +90,10 @@ export default function Upload() {
          }
       });
    };
+
+   useEffect(() => {
+      compressedFiles.length > 0 && compressedFiles.length === images.length && setIsToastShow(false, '', undefined);
+   }, [compressedFiles]);
 
    useEffect(() => {
       formData.append('title', uploadData.title);
@@ -119,21 +124,25 @@ export default function Upload() {
       }
    };
    const handleSubmit = async () => {
-      setLoading(true);
-      await post({
-         api: '/post/mission-board',
-         body: formData,
-         auth: true,
-         type: 'multipart/form-data',
-      })
-         .then(function () {
-            navigate('/');
-            setLoading(false);
-            setIsToastShow(true, '🎉 업로드 완료');
+      if (images.length === compressedFiles.length) {
+         setLoading(true);
+         await post({
+            api: '/post/mission-board',
+            body: formData,
+            auth: true,
+            type: 'multipart/form-data',
          })
-         .catch(function (error: AxiosError) {
-            console.log(error);
-         });
+            .then(function () {
+               navigate('/');
+               setLoading(false);
+               setIsToastShow(true, '🎉 업로드 완료');
+            })
+            .catch(function (error: AxiosError) {
+               console.log(error);
+            });
+      } else {
+         setIsToastShow(true, '다시 시도해주세요');
+      }
    };
    useEffect(() => {
       loading &&
@@ -144,7 +153,7 @@ export default function Upload() {
             style: { marginBottom: '50px' },
             hideProgressBar: true,
             closeOnClick: true,
-            closeButton: true,
+            closeButton: false,
             pauseOnHover: true,
             draggable: true,
             progress: undefined,
