@@ -30,7 +30,7 @@ export default function MyPage() {
             admin: false,
             nickname: 'GUEST',
             studentId: '',
-            teamName: 'GUEST_TEAM',
+            teamName: '',
             username: '비회원',
             role: 'guest',
          });
@@ -69,7 +69,7 @@ export default function MyPage() {
                <FaUserCircle />
             </div>
             <div className="flex flex-col gap-2 w-[calc(100%-100px)]">
-               {userInfo !== undefined && (
+               {userInfo !== undefined && userInfo.teamName.length > 0 && (
                   <p className="text-sm border-black border-solid border-[1px] w-fit px-2 py-[0.1rem] rounded-md">
                      {userInfo?.teamName}
                   </p>
