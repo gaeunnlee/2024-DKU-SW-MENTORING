@@ -17,7 +17,7 @@ export default function NicknameChange() {
    const checkValidation = (e: React.ChangeEvent<HTMLInputElement>) => {
       const nickname = e.target.value;
       setValidation((prev) => ({
-         character: /^[ㄱ-ㅎ가-힣a-zA-Z]+$/.test(nickname),
+         character: /^[ㄱ-ㅎ가-힣a-zA-Z ]+$/.test(nickname),
          length: nickname.length >= 3 && nickname.length <= 16,
       }));
    };
