@@ -23,14 +23,7 @@ export default function Router() {
          <TopBar />
          <Routes>
             <Route path={route.index.pathname} element={<Index />} />
-            <Route
-               path={route.mypage.pathname}
-               element={
-                  <PrivateRoute>
-                     <MyPage />
-                  </PrivateRoute>
-               }
-            />
+            <Route path={route.mypage.pathname} element={<MyPage />} />
             <Route
                path={route['my-posts'].pathname}
                element={

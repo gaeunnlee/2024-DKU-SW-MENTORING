@@ -1,7 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 import { useModal } from '../../hooks/useModal';
-import { FaPowerOff, FaRankingStar } from 'react-icons/fa6';
+import { FaArrowRightFromBracket, FaPowerOff, FaRankingStar } from 'react-icons/fa6';
 import { FaKey, FaUserFriends } from 'react-icons/fa';
 import { AiFillEdit } from 'react-icons/ai';
 import { MdFeedback, MdLaptopChromebook } from 'react-icons/md';
@@ -13,6 +13,15 @@ import NicknameChange from './NicknameChange';
 import { useToastStore } from '../../stores/toast-stores';
 import Feedback from './Feedback';
 import Developers from './Developers';
+import { IconType } from 'react-icons';
+
+interface IMenuButton {
+   icon: IconType;
+   name: string;
+   onClick: () => void;
+   isForUser: boolean;
+   isForGuest?: boolean;
+}
 
 export default function Menu() {
    const { open } = useModal();
@@ -20,6 +29,7 @@ export default function Menu() {
    const { openSheet } = useBottomSheet();
    const navigate = useNavigate();
    const { setIsToastShow } = useToastStore();
+   const { isLoggedIn } = useAuth();
 
    const mypageMenu = [
       {
@@ -28,6 +38,7 @@ export default function Menu() {
          onClick: () => {
             navigate('/teams');
          },
+         isForUser: false,
       },
       {
          icon: FaRankingStar,
@@ -35,6 +46,7 @@ export default function Menu() {
          onClick: () => {
             setIsToastShow(true, '⚠️ 행사 종료 후 공개 예정');
          },
+         isForUser: false,
       },
       {
          icon: FaKey,
@@ -42,6 +54,7 @@ export default function Menu() {
          onClick: () => {
             openSheet({ content: <PasswordChange />, sheetName: 'password-sheet' });
          },
+         isForUser: true,
       },
       {
          icon: AiFillEdit,
@@ -49,6 +62,7 @@ export default function Menu() {
          onClick: () => {
             openSheet({ content: <NicknameChange />, sheetName: 'nickname-sheet' });
          },
+         isForUser: true,
       },
       {
          icon: MdFeedback,
@@ -56,6 +70,7 @@ export default function Menu() {
          onClick: () => {
             openSheet({ content: <Feedback />, sheetName: 'feedback-sheet' });
          },
+         isForUser: false,
       },
       {
          icon: MdLaptopChromebook,
@@ -63,6 +78,7 @@ export default function Menu() {
          onClick: () => {
             openSheet({ content: <Developers />, sheetName: 'develop-sheet' });
          },
+         isForUser: false,
       },
       {
          icon: FaPowerOff,
@@ -70,24 +86,43 @@ export default function Menu() {
          onClick: () => {
             logout();
          },
+         isForUser: true,
+      },
+      {
+         icon: FaArrowRightFromBracket,
+         name: '로그인',
+         onClick: () => {
+            navigate('/login', { state: { afterLogout: false } });
+         },
+         isForUser: false,
+         isForGuest: true,
       },
    ];
+   const MenuButton = ({ item }: { item: IMenuButton }) => (
+      <Button
+         key={item.name}
+         onClick={() => {
+            item.onClick !== undefined ? item.onClick() : open({ type: 'error', content: <>🚧 개발 중 🚧</> });
+         }}
+      >
+         <Icon>
+            <item.icon />
+         </Icon>
+         <p className="whitespace-nowrap">{item.name}</p>
+      </Button>
+   );
 
    return (
       <Container>
-         {mypageMenu.map((item) => (
-            <Button
-               key={item.name}
-               onClick={() => {
-                  item.onClick !== undefined ? item.onClick() : open({ type: 'error', content: <>🚧 개발 중 🚧</> });
-               }}
-            >
-               <Icon>
-                  <item.icon />
-               </Icon>
-               <p className="whitespace-nowrap">{item.name}</p>
-            </Button>
-         ))}
+         {mypageMenu.map((item, index) => {
+            if (isLoggedIn || item.isForUser === false) {
+               if (item.isForGuest !== true) {
+                  return <MenuButton key={index} item={item} />;
+               } else if (!isLoggedIn) {
+                  return <MenuButton key={index} item={item} />;
+               }
+            }
+         })}
       </Container>
    );
 }

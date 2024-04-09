@@ -6,11 +6,13 @@ import { ReactComponent as MissionIcon } from '../../assets/svg/folder-dynamic-c
 import { useNavigate } from 'react-router-dom';
 import { BottomSheet, BottomSheetRef } from 'react-spring-bottom-sheet';
 import MissionCompleted from './MissionCompleted';
+import { useAuth } from '../../hooks/useAuth';
 
 export default function TeamInfo({ data }: { data?: IMyTeam }) {
    const navigate = useNavigate();
    const [openBottomSheet, setOpenBottomSheet] = useState(false);
    const sheetRef = useRef<BottomSheetRef>(null);
+   const { isLoggedIn } = useAuth();
 
    const infoBoxData = [
       {
@@ -54,16 +56,23 @@ export default function TeamInfo({ data }: { data?: IMyTeam }) {
       },
    ];
    return (
-      <div className="bg-[#f9f9f9] px-5 py-3 rounded-lg flex flex-col gap-2">
-         <p className="text-lg leading-none bg-zinc-500 w-fit text-white px-2 py-1 rounded-lg">{data?.teamName}</p>
-         <div className="flex items-end gap-2 mb-2">
-            <span className="text-lg leading-none">{data?.mentor}</span>
-            {data?.members.map((name) => (
-               <span key={name} className="leading-none">
-                  {name}
-               </span>
-            ))}
-         </div>
+      <div className="bg-[rgb(249,249,249)] px-5 py-3 rounded-lg flex flex-col gap-2">
+         {isLoggedIn && (
+            <>
+               <p className="text-lg leading-none bg-zinc-500 w-fit text-white px-2 py-1 rounded-lg">
+                  {data?.teamName}
+               </p>
+
+               <div className="flex items-end gap-2 mb-2">
+                  <span className="text-lg leading-none">{data?.mentor}</span>
+                  {data?.members.map((name) => (
+                     <span key={name} className="leading-none">
+                        {name}
+                     </span>
+                  ))}
+               </div>
+            </>
+         )}
          <div className="flex gap-9 w-full">
             {infoBoxData.map(({ icon, content, event }, index) => (
                <div

@@ -8,6 +8,7 @@ import TeamInfo from './TeamInfo';
 import { useRoleStore } from '../../stores/role-stores';
 import AdminMenu from './AdminMenu';
 import { useSheetStore } from '../../stores/sheet-stores';
+import { useAuth } from '../../hooks/useAuth';
 
 export default function MyPage() {
    const { get } = useApi();
@@ -15,27 +16,50 @@ export default function MyPage() {
    const [teamInfo, setTeamInfo] = useState<IMyTeam>();
    const { setRole, setIsAdmin } = useRoleStore();
    const { isSheetOpen } = useSheetStore();
+   const { isLoggedIn } = useAuth();
 
    useEffect(() => {
-      get({ api: '/user', auth: true }).then(function (data: IUserInfo) {
-         setUserInfo(data);
-         setRole(data.role);
-         setIsAdmin(data.role === 'Admin');
-      });
+      if (isLoggedIn) {
+         get({ api: '/user', auth: true }).then(function (data: IUserInfo) {
+            setUserInfo(data);
+            setRole(data.role);
+            setIsAdmin(data.role === 'Admin');
+         });
+      } else {
+         setUserInfo({
+            admin: false,
+            nickname: 'GUEST',
+            studentId: '',
+            teamName: 'GUEST_TEAM',
+            username: '비회원',
+            role: 'guest',
+         });
+         setRole('guest');
+         setIsAdmin(false);
+      }
    }, []);
 
    useEffect(() => {
-      get({ api: '/user', auth: true }).then(function (data: IUserInfo) {
-         setUserInfo(data);
-      });
+      isLoggedIn &&
+         get({ api: '/user', auth: true }).then(function (data: IUserInfo) {
+            setUserInfo(data);
+         });
    }, [isSheetOpen]);
 
    useEffect(() => {
-      if (userInfo?.admin === false) {
+      if (userInfo?.admin === false && isLoggedIn) {
          get({ api: '/team/my', auth: true }).then(function (response: IMyTeam) {
             setTeamInfo(response);
          });
+      } else if (userInfo?.admin === false && isLoggedIn === false) {
+         setTeamInfo({
+            teamName: '로그인 이후 이용 가능합니다',
+            score: 0,
+            mentor: '',
+            members: [],
+         });
       }
+      userInfo?.admin;
    }, [userInfo]);
 
    return (
@@ -53,7 +77,7 @@ export default function MyPage() {
                <p className="text-lg">{userInfo?.nickname}</p>
                <div className="flex justify-between">
                   <p>
-                     {userInfo?.username} ({userInfo?.studentId})
+                     {userInfo?.username} {userInfo?.studentId && `(${userInfo.studentId})`}
                   </p>
                </div>
             </div>
