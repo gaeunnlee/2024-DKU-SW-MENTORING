@@ -6,6 +6,7 @@ import 'swiper/css';
 import 'swiper/css/navigation';
 import 'swiper/css/pagination';
 import { Navigation, Pagination } from 'swiper/modules';
+import styled from 'styled-components';
 
 export default function Carousel({ data }: { data: IFile[] }) {
    const [loading, setLoading] = useState(true);
@@ -27,10 +28,18 @@ export default function Carousel({ data }: { data: IFile[] }) {
          >
             {data.map((item) => (
                <SwiperSlide key={item.url}>
-                  <img className="size-full object-cover" src={item.url} />
+                  <ImageWrapper img={item.url} />
                </SwiperSlide>
             ))}
          </Swiper>
       </div>
    );
 }
+
+const ImageWrapper = styled.div<{ img: string }>`
+   width: 100%;
+   background-image: url(${({ img }) => img});
+   background-size: contain;
+   background-repeat: no-repeat;
+   background-position: center;
+`;

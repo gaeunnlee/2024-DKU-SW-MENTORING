@@ -67,7 +67,9 @@ div[aria-modal='true'] {
    overscroll-behavior: none;
 }
 
+/* Swiper */
 .swiper-carousel {
+   width: 100%;
    transition: opacity 0.2s ease-in-out;
 }
 .swiper-slide {
