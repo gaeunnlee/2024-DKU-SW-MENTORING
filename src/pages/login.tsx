@@ -22,9 +22,7 @@ export default function Login() {
    const { state } = useLocation();
 
    useEffect(() => {
-      setTimeout(() => {
-         state.afterLogout && setIsToastShow(true, '로그아웃 완료');
-      }, 1000);
+      setIsToastShow(true, '로그아웃 완료');
       isLoggedIn && navigate('/mypage');
    }, []);
 
