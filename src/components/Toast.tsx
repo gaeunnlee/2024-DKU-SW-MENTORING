@@ -34,9 +34,10 @@ export default function ToastProvider({ children }: { children: ReactNode }) {
             theme: 'dark',
             transition: Bounce,
          });
-         setTimeout(() => {
-            setIsToastShow(false, '', undefined);
-         }, 2000);
+         duration !== false &&
+            setTimeout(() => {
+               setIsToastShow(false, '', undefined);
+            }, duration);
       }
    }, [isToastShow]);
    return (

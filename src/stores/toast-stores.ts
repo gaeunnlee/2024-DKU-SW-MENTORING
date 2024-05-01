@@ -3,8 +3,8 @@ import { create } from 'zustand';
 interface ToastState {
    isToastShow: boolean;
    toastContent: string;
-   duration: number | undefined;
-   setIsToastShow: (isToastShow: boolean, toastContent: string, duration?: number) => void;
+   duration: number | undefined | false;
+   setIsToastShow: (isToastShow: boolean, toastContent: string, duration?: number | undefined | false) => void;
 }
 
 export const useToastStore = create<ToastState>((set) => ({
