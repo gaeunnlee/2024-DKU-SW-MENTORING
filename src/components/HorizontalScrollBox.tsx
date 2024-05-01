@@ -6,13 +6,9 @@ import 'swiper/css/free-mode';
 import 'swiper/css/pagination';
 import styled from 'styled-components';
 
-export default function HorizontalScrollBox({
-   children,
-}: {
-   children: ReactNode;
-}) {
+export default function HorizontalScrollBox({ children, width }: { children: ReactNode; width?: string }) {
    return (
-      <Wrapper>
+      <Wrapper width={width}>
          <Swiper
             slidesPerView="auto"
             spaceBetween={10}
@@ -29,7 +25,8 @@ export default function HorizontalScrollBox({
    );
 }
 
-const Wrapper = styled.div`
+const Wrapper = styled.div<{ width?: string }>`
+   width: ${({ width }) => width ?? 'fit-content'};
    .horizontalScrollBox > .swiper-wrapper,
    .horizontalScrollBox > .swiper-wrapper > .swiper-slide {
       width: fit-content !important;

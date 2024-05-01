@@ -1,19 +1,18 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState, ReactNode, useEffect } from 'react';
 import Layout from '../../components/Layout';
-import Box from '../../components/ui/Box';
 import styled from 'styled-components';
-import { difficulty } from '../../data/enum';
-import { useModal } from '../../hooks/useModal';
-import { IMission } from '../../data/interface';
-import MissionDetail from './detail';
-import { difficultyList } from '../../data/difficultyList';
-import HorizontalScrollBox from '../../components/HorizontalScrollBox';
 import { SwiperSlide } from 'swiper/react';
-import { useLayoutScrollStore } from '../../stores/layout-scroll-stores';
-import BoardLayout from '../../components/BoardLayout';
-import { useSheetStore } from '../../stores/sheet-stores';
+import HorizontalScrollBox from '../../components/HorizontalScrollBox';
 import { FaSearch } from 'react-icons/fa';
+import { IMission } from '../../data/interface';
+import Box from '../../components/ui/Box';
+import { useSheetStore } from '../../stores/sheet-stores';
+import MissionDetail from './detail';
+import { useModal } from '../../hooks/useModal';
+import { difficulty } from '../../data/enum';
+import BoardLayout from '../../components/BoardLayout';
 import { useDebounce } from '../../hooks/useDebounce';
+import { useLayoutScrollStore } from '../../stores/layout-scroll-stores';
 
 export default function Missions({
    selectMode,
@@ -22,34 +21,54 @@ export default function Missions({
    selectMode?: boolean;
    passMissionId?: (id: number) => void;
 }) {
-   const [filteredDifficulty, setFilteredDifficulty] = useState<string | undefined>('');
-   const [hasBonusMission, setHasBonusMission] = useState<boolean | undefined>();
-   const [isSearchMode, setIsSearchMode] = useState(false);
-   const [searchKeyword, setSearchKeyword] = useState('');
+   const [filterStatus, setFilterStatus] = useState<FilterKey>({
+      isSearchMode: false,
+      difficulty: undefined,
+      isBonusMission: false,
+      isSuddenMission: false,
+   });
    const [api, setApi] = useState('');
-   const { open } = useModal();
    const { setIsSheetOpen } = useSheetStore();
+   const { open } = useModal();
+   const [searchKeyword, setSearchKeyword] = useState('');
    const debouncedQuery = useDebounce(searchKeyword, 500);
-
    const { setIsScrollTop } = useLayoutScrollStore();
 
-   const handleMissionApi = ({
-      difficulty,
-      hasBonusMission,
-      searchKeyword,
-   }: {
-      difficulty?: string;
-      hasBonusMission?: boolean;
-      searchKeyword?: string;
-   }) => {
-      setApi(
-         `/mission?sort=id,asc${hasBonusMission ? `&hasBonusMission=${hasBonusMission}` : ''}${difficulty ? `&difficulty=${filteredDifficulty}` : ''}${searchKeyword ? `&keyword=${searchKeyword}` : ''}`
-      );
+   const initializeFilterStatus = () => {
+      setFilterStatus({
+         isSearchMode: false,
+         difficulty: undefined,
+         isBonusMission: false,
+         isSuddenMission: false,
+      });
    };
 
-   useEffect(() => {
-      handleMissionApi({});
-   }, []);
+   const handleFilterMission = (e: React.ChangeEvent<HTMLInputElement>) => {
+      setIsScrollTop(true);
+      initializeFilterStatus();
+      setFilterStatus((prev) => ({
+         ...prev,
+         [e.target.value]: e.target.id,
+      }));
+   };
+
+   const handleFilterButtonClick = (e: React.MouseEvent<HTMLInputElement, MouseEvent>) => {
+      type Key = 'isSearchMode' | 'isBonusMission' | 'isSuddenMission' | 'difficulty';
+      let property: Key;
+      for (property in filterStatus) {
+         if (e.currentTarget.value === property && filterStatus[property]) {
+            if (property === 'difficulty') {
+               if (filterStatus.difficulty === e.currentTarget.id) {
+                  e.currentTarget.checked = false;
+                  initializeFilterStatus();
+               }
+            } else {
+               e.currentTarget.checked = false;
+               initializeFilterStatus();
+            }
+         }
+      }
+   };
 
    const showDetail = (data: IMission) => {
       open({
@@ -58,32 +77,17 @@ export default function Missions({
       });
    };
 
-   const filterMissionsByDifficulty = (e: React.MouseEvent<HTMLElement>) => {
-      setHasBonusMission(false);
-      setIsScrollTop(true);
+   useEffect(() => {
+      setApi(`/mission?sort=id,asc${debouncedQuery.length > 0 ? `&keyword=${debouncedQuery}` : ''}`);
+   }, [debouncedQuery]);
 
-      if (e.currentTarget.id === filteredDifficulty) {
-         e.currentTarget.classList.remove('checked');
-         setFilteredDifficulty('');
-      } else {
-         document.querySelector('.checked')?.classList.remove('checked');
-         e.currentTarget.classList.toggle('checked');
-         setFilteredDifficulty(e.currentTarget.id);
-      }
-   };
-
-   const filterBonusMission = (e: React.ChangeEvent<HTMLInputElement>) => {
-      if (hasBonusMission) {
-         document.querySelector('.checked')?.classList.remove('checked');
-         setHasBonusMission(false);
-      } else {
-         document.querySelector('.checked')?.classList.remove('checked');
-         e.currentTarget.parentElement!.classList.add('checked');
-         setHasBonusMission(true);
-      }
-      setFilteredDifficulty('');
-      setIsScrollTop(true);
-   };
+   useEffect(() => {
+      const { isBonusMission, isSuddenMission, difficulty } = filterStatus;
+      setSearchKeyword('');
+      isSuddenMission
+         ? setApi('/mission/outbreak?sort=id,asc')
+         : setApi(`/mission?sort=id,asc${filterStatus ? `&hasBonusMission=${isBonusMission}` : ''}${difficulty ? `&difficulty=${difficulty}` : ''}`); // prettier-ignore
+   }, [filterStatus]);
 
    const Cell = ({ data }: { data: IMission }) => (
       <Box
@@ -113,49 +117,24 @@ export default function Missions({
       </Box>
    );
 
-   useEffect(() => {
-      if (isSearchMode) {
-         setHasBonusMission(undefined);
-         setFilteredDifficulty(undefined);
-      } else {
-         handleMissionApi({});
-         setSearchKeyword('');
-      }
-   }, [isSearchMode]);
-
-   useEffect(() => {
-      handleMissionApi({
-         searchKeyword: debouncedQuery,
-      });
-   }, [debouncedQuery]);
-
-   useEffect(() => {
-      if (filteredDifficulty === '' && hasBonusMission === false) {
-         handleMissionApi({});
-      } else {
-         handleMissionApi({
-            hasBonusMission: hasBonusMission,
-            difficulty: filteredDifficulty,
-            searchKeyword: '',
-         });
-      }
-   }, [hasBonusMission, filteredDifficulty]);
-
    return (
       <Layout className="w-full overscroll" style={{ padding: 0, height: 'calc(100dvh - 60px)' }}>
-         <FilterContainer className="flex gap-2 sticky top-0 bg-white p-3">
-            <label className="cursor-pointer bg-zinc-100 px-3 py-1 text-zinc-500 rounded-full flex whitespace-nowrap">
-               <input
-                  className="hidden"
-                  type="checkbox"
+         <FilterContainer>
+            {fixedFilterButtonList.slice(0, filterStatus.isSearchMode ? 1 : 3).map(({ key, value, content }) => (
+               <FilterButton
+                  key={key}
+                  filterKey={key}
+                  filterValue={value}
+                  content={content}
+                  onChange={(e) => {
+                     handleFilterMission(e);
+                  }}
                   onClick={(e) => {
-                     e.currentTarget.parentElement!.classList.toggle('checked');
-                     setIsSearchMode((prev) => !prev);
+                     handleFilterButtonClick(e);
                   }}
                />
-               <FaSearch />
-            </label>
-            {isSearchMode && (
+            ))}
+            {filterStatus.isSearchMode && (
                <input
                   className="w-full"
                   type="text"
@@ -166,34 +145,23 @@ export default function Missions({
                   }}
                />
             )}
-            {isSearchMode || (
-               <>
-                  <label className="cursor-pointer bg-zinc-100 px-3 py-1 text-zinc-500 rounded-full flex whitespace-nowrap">
-                     <input
-                        className="hidden"
-                        type="checkbox"
+            <HorizontalScrollBox width="calc(100% - 170px)">
+               {scrolledFilterButtonList.slice(0, filterStatus.isSearchMode ? 0 : 6).map(({ key, value, content }) => (
+                  <SwiperSlide key={value}>
+                     <FilterButton
+                        filterKey={key}
+                        filterValue={value}
+                        content={content}
                         onChange={(e) => {
-                           filterBonusMission(e);
+                           handleFilterMission(e);
+                        }}
+                        onClick={(e) => {
+                           handleFilterButtonClick(e);
                         }}
                      />
-                     보너스
-                  </label>
-                  <HorizontalScrollBox>
-                     {difficultyList.map(({ id, name }) => (
-                        <SwiperSlide
-                           key={id}
-                           id={id}
-                           className="difficulty cursor-pointer bg-zinc-100 px-4 py-1 text-zinc-500 rounded-full"
-                           onClick={(e) => {
-                              filterMissionsByDifficulty(e);
-                           }}
-                        >
-                           {name}
-                        </SwiperSlide>
-                     ))}
-                  </HorizontalScrollBox>
-               </>
-            )}
+                  </SwiperSlide>
+               ))}
+            </HorizontalScrollBox>
          </FilterContainer>
          <BoardLayout<IMission>
             option={{ itemPerPage: 10 }}
@@ -203,10 +171,52 @@ export default function Missions({
       </Layout>
    );
 }
+
+const FilterButton = ({
+   filterKey,
+   filterValue,
+   content,
+   onChange,
+   onClick,
+}: {
+   filterKey: string;
+   filterValue: string | boolean;
+   content: string | ReactNode;
+   onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+   onClick: (e: React.MouseEvent<HTMLInputElement, MouseEvent>) => void;
+}) => (
+   <label className="cursor-pointer bg-zinc-100 px-3 py-1 text-zinc-500 rounded-full flex whitespace-nowrap">
+      <input
+         type="radio"
+         id={String(filterValue)}
+         value={filterKey}
+         name="filterKey"
+         className="hidden"
+         onClick={(e) => {
+            onClick(e);
+         }}
+         onChange={(e) => {
+            onChange(e);
+         }}
+      />
+      {content}
+   </label>
+);
+
 const FilterContainer = styled.div`
+   display: flex;
+   gap: 1rem;
+   position: sticky;
+   top: 0;
+   background-color: white;
+   padding: 1rem;
    .checked {
       background-color: black;
       color: white;
+   }
+   label:has(input:checked) {
+      background-color: #000;
+      color: #fff;
    }
 `;
 
@@ -244,3 +254,61 @@ const MissionInfo = styled.div`
 `;
 
 const Difficulty = styled.span``;
+
+type FilterKey = {
+   isSearchMode: boolean;
+   difficulty: undefined | 'VERY_EASY' | 'EASY' | 'NORMAL' | 'NORMAL_HARD' | 'HARD' | 'VERY_HARD';
+   isBonusMission: boolean | undefined;
+   isSuddenMission: boolean | undefined;
+};
+
+const fixedFilterButtonList = [
+   {
+      key: 'isSearchMode',
+      value: true,
+      content: <FaSearch />,
+   },
+   {
+      key: 'isBonusMission',
+      value: true,
+      content: '보너스',
+   },
+   {
+      key: 'isSuddenMission',
+      value: true,
+      content: '돌발🚨',
+   },
+];
+
+const scrolledFilterButtonList = [
+   {
+      key: 'difficulty',
+      value: 'VERY_EASY',
+      content: '최하',
+   },
+   {
+      key: 'difficulty',
+      value: 'EASY',
+      content: '하',
+   },
+   {
+      key: 'difficulty',
+      value: 'NORMAL',
+      content: '중',
+   },
+   {
+      key: 'difficulty',
+      value: 'NORMAL_HARD',
+      content: '중상',
+   },
+   {
+      key: 'difficulty',
+      value: 'HARD',
+      content: '상',
+   },
+   {
+      key: 'difficulty',
+      value: 'VERY_HARD',
+      content: '최상',
+   },
+];
