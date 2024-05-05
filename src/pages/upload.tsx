@@ -92,7 +92,9 @@ export default function Upload() {
    };
 
    useEffect(() => {
-      compressedFiles.length > 0 && compressedFiles.length === images.length && setIsToastShow(false, '', undefined);
+      compressedFiles.length > 0 &&
+         compressedFiles.length === images.length + 1 &&
+         setIsToastShow(false, '', undefined);
    }, [compressedFiles]);
 
    useEffect(() => {
@@ -124,7 +126,7 @@ export default function Upload() {
       }
    };
    const handleSubmit = async () => {
-      if (images.length === compressedFiles.length) {
+      if (images.length + 1 === compressedFiles.length) {
          setLoading(true);
          await post({
             api: '/post/mission-board',
