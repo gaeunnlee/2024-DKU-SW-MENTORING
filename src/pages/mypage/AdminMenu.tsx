@@ -5,11 +5,15 @@ import { FaPowerOff } from 'react-icons/fa6';
 import { useAuth } from '../../hooks/useAuth';
 import { useNavigate } from 'react-router-dom';
 import { MdOutlineFactCheck } from 'react-icons/md';
+import { HiMiniPencilSquare } from 'react-icons/hi2';
+import { useBottomSheet } from '../../hooks/useBottomSheet';
+import MissionEditor from './MissionEditor';
 
 export default function AdminMenu() {
    const { open } = useModal();
    const { logout } = useAuth();
    const navigate = useNavigate();
+   const { openSheet } = useBottomSheet();
 
    const mypageMenu = [
       {
@@ -17,6 +21,13 @@ export default function AdminMenu() {
          name: '미승인',
          onClick: () => {
             navigate('/unapproved-posts');
+         },
+      },
+      {
+         icon: HiMiniPencilSquare,
+         name: '미션 추가',
+         onClick: () => {
+            openSheet({ content: <MissionEditor /> });
          },
       },
       {
