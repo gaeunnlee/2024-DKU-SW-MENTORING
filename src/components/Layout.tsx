@@ -1,6 +1,4 @@
 import React, { ComponentProps, useEffect, useRef, useState } from 'react';
-import { ReactNode } from 'react';
-import styled from 'styled-components';
 import { useLayoutScrollStore } from '../stores/layout-scroll-stores';
 import { useNavStore } from '../stores/nav-stores';
 import { motion } from 'framer-motion';
@@ -22,7 +20,7 @@ export default function Layout({ children, className, ...props }: LayoutProps) {
       <div
          id="layout"
          ref={LayoutRef}
-         className={`w-full flex flex-col gap-3 p-5 overflow-auto h-[calc(100dvh-60px)] pb-[60px] ${className}`}
+         className={`w-full flex flex-col gap-3 px-5 overflow-auto h-[calc(100dvh-60px)] pt-4 pb-[60px] ${className}`}
          onScroll={({ currentTarget }) => {
             if (currentTarget.scrollTop < 100) {
                setIsNavVisible(true);
@@ -34,7 +32,7 @@ export default function Layout({ children, className, ...props }: LayoutProps) {
          {...props}
       >
          <motion.div
-            className="w-full flex flex-col gap-3"
+            className="w-full flex flex-col"
             variants={{
                hidden: { y: 10, opacity: 0 },
                enter: { opacity: 1, x: 0, y: 0 },
@@ -44,6 +42,7 @@ export default function Layout({ children, className, ...props }: LayoutProps) {
             animate="enter"
             transition={{ type: 'linear' }}
          >
+            <div className="w-full h-[50px]" />
             {children}
          </motion.div>
       </div>

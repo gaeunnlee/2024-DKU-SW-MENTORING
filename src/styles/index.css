@@ -54,6 +54,7 @@ div[aria-modal='true'] {
    max-width: 480px;
    width: 100%;
    overscroll-behavior: none;
+   z-index: 9999;
 }
 .completed-mission-bottom-sheet > div[aria-modal='true'] {
    background-color: #f6f6f6;

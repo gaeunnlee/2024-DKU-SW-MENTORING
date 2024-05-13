@@ -14,10 +14,12 @@ export default function BoardLayout<T extends ICell>({
    api,
    setCell,
    option,
+   className,
 }: {
    api: string;
    setCell: (data: T) => JSX.Element;
    option?: IOption;
+   className?: string;
 }) {
    const { list, isLoading, bottom } = useInfiniteScroll<T>({
       api: api,
@@ -35,7 +37,11 @@ export default function BoardLayout<T extends ICell>({
 
    return (
       <>
-         {list?.map((data) => <div key={data.id}>{setCell(data)}</div>)}
+         {list?.map((data) => (
+            <div className={className} key={data.id}>
+               {setCell(data)}
+            </div>
+         ))}
          {!isLoading && !isEmpty && <div ref={bottom} />}
       </>
    );

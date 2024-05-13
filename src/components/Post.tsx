@@ -115,7 +115,9 @@ export default function Post({ data }: { data: IPost }) {
                   <p className="leading-0 text-[0.9rem]">{data.author}</p>
                   <div className="flex justify-between w-full">
                      <div className="leading-0 text-slate-800 flex gap-1 items-center justify-between w-full">
-                        <span className="whitespace-nowrap w-[220px] text-ellipsis overflow-hidden">{missionName}</span>
+                        <span className="whitespace-nowrap w-[220px] text-ellipsis text-[0.9rem] overflow-hidden">
+                           {missionName}
+                        </span>
                         <div className="flex gap-1">
                            {data.bonusMissionSuccessful && <BonusStatusTag />}
                            <MissionStatusTag status={data.registerStatus} />

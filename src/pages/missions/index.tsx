@@ -145,7 +145,7 @@ export default function Missions({
                   }}
                />
             )}
-            <HorizontalScrollBox width="calc(100% - 170px)">
+            <HorizontalScrollBox width="calc(100% - 190px)">
                {scrolledFilterButtonList.slice(0, filterStatus.isSearchMode ? 0 : 6).map(({ key, value, content }) => (
                   <SwiperSlide key={value}>
                      <FilterButton
@@ -164,6 +164,7 @@ export default function Missions({
             </HorizontalScrollBox>
          </FilterContainer>
          <BoardLayout<IMission>
+            className="px-2"
             option={{ itemPerPage: 10 }}
             api={api}
             setCell={(data: IMission) => <Cell data={data} />}
@@ -207,9 +208,12 @@ const FilterContainer = styled.div`
    display: flex;
    gap: 1rem;
    position: sticky;
-   top: 0;
+   height: 50px;
+   align-items: center;
+   top: -1px;
    background-color: white;
-   padding: 1rem;
+   padding: 0 1rem;
+   z-index: 999;
    .checked {
       background-color: black;
       color: white;

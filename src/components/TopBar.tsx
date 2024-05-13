@@ -33,11 +33,16 @@ export default function TopBar() {
    );
 }
 const Container = styled.nav`
+   position: fixed;
+   background-color: #fff;
+   z-index: 2;
+   top: 0;
    padding: 0 10px;
    box-sizing: border-box;
    display: flex;
    height: 50px;
    width: 100%;
+   max-width: 480px;
    justify-content: center;
    align-items: center;
    font-weight: 800;
