@@ -10,7 +10,7 @@ import ImageButton from '../../components/ImageButton';
 import ImageList from '../../components/ImageList';
 import imageCompression from 'browser-image-compression';
 import { FaCamera, FaTrash } from 'react-icons/fa';
-import { useToastStore } from '../../stores/toast-stores';
+import { toast } from 'react-toastify';
 export default function NoticeUpload() {
    const editorRef = useRef<Editor>(null);
    const [title, setTitle] = useState('');
@@ -20,7 +20,6 @@ export default function NoticeUpload() {
    const [images, setImages] = useState(['']);
    const [compressedFiles, setCompressedFiles] = useState<File[]>([new File([], '')]);
    const formData = new FormData();
-   const { setIsToastShow } = useToastStore();
 
    const uploadNotice = async () => {
       if (title.length > 0 && body.length > 0) {
@@ -37,7 +36,7 @@ export default function NoticeUpload() {
                console.log(e);
             });
       } else {
-         setIsToastShow(true, '😅 제목과 내용을 입력해주세요');
+         toast('😅 제목과 내용을 입력해주세요');
       }
    };
    const handleImages = (e: React.ChangeEvent<HTMLInputElement>) => {

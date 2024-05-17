@@ -28,8 +28,10 @@ html {
 /* React-Toastify */
 .Toastify__toast-container {
    display: flex;
-   justify-content: center;
+   flex-direction: column;
+   align-items: center;
    padding: 0;
+   margin-bottom: 90px;
 }
 
 .Toastify__toast {
@@ -38,10 +40,13 @@ html {
    min-height: 30px;
    border-radius: 30px;
    background-color: #00000080;
+   color: white;
    text-align: center;
    width: fit-content;
-   margin-bottom: 90px;
-   padding: 0 10px;
+   padding: 0 15px;
+}
+.Toastify__close-button {
+   display: none;
 }
 .Toastify__toast-body {
    padding: 0 !important;

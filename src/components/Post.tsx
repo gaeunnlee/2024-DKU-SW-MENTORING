@@ -15,7 +15,7 @@ import { TMissionStatus } from '../data/type';
 import { useModal } from '../hooks/useModal';
 import { AxiosError } from 'axios';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { useToastStore } from '../stores/toast-stores';
+import { toast } from 'react-toastify';
 
 const Container = styled.div`
    display: flex;
@@ -32,7 +32,6 @@ export default function Post({ data }: { data: IPost }) {
    const { isLoggedIn } = useAuth();
    const { open, close } = useModal();
    const navigate = useNavigate();
-   const { setIsToastShow } = useToastStore();
    const { pathname } = useLocation();
 
    useEffect(() => {
@@ -99,7 +98,7 @@ export default function Post({ data }: { data: IPost }) {
    const deletePost = async (id: number) => {
       await axiosDelete({ api: `/post/mission-board/${id}`, auth: true })
          .then((response) => {
-            setIsToastShow(true, '⚒️ 삭제 완료');
+            toast('⚒️ 삭제 완료');
          })
          .catch((e: AxiosError) => {
             console.log(e);

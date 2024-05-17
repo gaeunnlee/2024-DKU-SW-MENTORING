@@ -3,12 +3,11 @@ import Input from '../../components/ui/Input';
 import Button from '../../components/ui/Button';
 import { useApi } from '../../hooks/useApi';
 import { useBottomSheet } from '../../hooks/useBottomSheet';
-import { useToastStore } from '../../stores/toast-stores';
 import { FaCheckCircle } from 'react-icons/fa';
 import { AxiosError } from 'axios';
+import { toast } from 'react-toastify';
 
 export default function NicknameChange() {
-   const { setIsToastShow } = useToastStore();
    const [nickname, setNickname] = useState('');
    const { patch } = useApi();
    const { closeSheet } = useBottomSheet();
@@ -27,13 +26,13 @@ export default function NicknameChange() {
          await patch({ api: '/user/change/nickname', auth: true, body: { nickname } })
             .then((response) => {
                closeSheet();
-               setIsToastShow(true, `🖐️ ${nickname} 님, 안녕하세요!`);
+               toast(`🖐️ ${nickname} 님, 안녕하세요!`);
             })
             .catch(function (error: AxiosError) {
-               setIsToastShow(true, '이미 존재하는 닉네임입니다');
+               toast('이미 존재하는 닉네임입니다');
             });
       } else {
-         setIsToastShow(true, '닉네임 형식을 다시 확인해주세요');
+         toast('닉네임 형식을 다시 확인해주세요');
       }
    };
 

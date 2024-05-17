@@ -3,14 +3,13 @@ import Input from '../components/ui/Input';
 import Layout from '../components/Layout';
 import Button from '../components/ui/Button';
 import { checkInputRegex } from '../utils/checkRegex';
-import Modal from '../components/Modal/Modal';
 import { useModal } from '../hooks/useModal';
 import { useApi } from '../hooks/useApi';
-import axios, { AxiosError, AxiosResponse } from 'axios';
-import { IErrorResponse, IToken } from '../data/interface';
+import { AxiosError } from 'axios';
+import { IToken } from '../data/interface';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { useAuth } from '../hooks/useAuth';
-import { useToastStore } from '../stores/toast-stores';
+import { toast } from 'react-toastify';
 
 export default function Login() {
    const [loginInfo, setLoginInfo] = useState({ studentId: '', password: '' });
@@ -18,11 +17,10 @@ export default function Login() {
    const { open } = useModal();
    const { post } = useApi();
    const { isLoggedIn } = useAuth();
-   const { setIsToastShow } = useToastStore();
    const { state } = useLocation();
 
    useEffect(() => {
-      state.afterLogout && setIsToastShow(true, '로그아웃 완료');
+      state.afterLogout && toast('로그아웃 완료');
       isLoggedIn && navigate('/mypage');
    }, []);
 
@@ -33,7 +31,7 @@ export default function Login() {
             .then(function (data: IToken) {
                localStorage.setItem('accessToken', data.accessToken);
                localStorage.setItem('refreshToken', data.refreshToken);
-               setIsToastShow(true, '🎉 로그인 성공');
+               toast('🎉 로그인되었습니다');
                navigate('/mypage');
             })
             .catch(function (e: AxiosError) {

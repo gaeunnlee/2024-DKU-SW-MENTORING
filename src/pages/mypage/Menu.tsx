@@ -10,10 +10,10 @@ import { useNavigate } from 'react-router-dom';
 import { useBottomSheet } from '../../hooks/useBottomSheet';
 import PasswordChange from './PasswordChange';
 import NicknameChange from './NicknameChange';
-import { useToastStore } from '../../stores/toast-stores';
 import Feedback from './Feedback';
 import Developers from './Developers';
 import { IconType } from 'react-icons';
+import { toast } from 'react-toastify';
 
 interface IMenuButton {
    icon: IconType;
@@ -28,7 +28,6 @@ export default function Menu() {
    const { logout } = useAuth();
    const { openSheet } = useBottomSheet();
    const navigate = useNavigate();
-   const { setIsToastShow } = useToastStore();
    const { isLoggedIn } = useAuth();
 
    const mypageMenu = [
@@ -44,7 +43,7 @@ export default function Menu() {
          icon: FaRankingStar,
          name: '랭킹',
          onClick: () => {
-            setIsToastShow(true, '⚠️ 행사 종료 후 공개 예정');
+            toast('⚠️ 행사 종료 후 공개 예정');
          },
          isForUser: false,
       },

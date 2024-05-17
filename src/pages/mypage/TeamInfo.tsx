@@ -7,14 +7,13 @@ import { useNavigate } from 'react-router-dom';
 import { BottomSheet, BottomSheetRef } from 'react-spring-bottom-sheet';
 import MissionCompleted from './MissionCompleted';
 import { useAuth } from '../../hooks/useAuth';
-import { useToastStore } from '../../stores/toast-stores';
+import { toast } from 'react-toastify';
 
 export default function TeamInfo({ data }: { data?: IMyTeam }) {
    const navigate = useNavigate();
    const [openBottomSheet, setOpenBottomSheet] = useState(false);
    const sheetRef = useRef<BottomSheetRef>(null);
    const { isLoggedIn } = useAuth();
-   const { setIsToastShow } = useToastStore();
 
    const infoBoxData = [
       {
@@ -40,7 +39,7 @@ export default function TeamInfo({ data }: { data?: IMyTeam }) {
             </p>
          ),
          event: () => {
-            isLoggedIn ? navigate('/my-posts') : setIsToastShow(true, '🥲 로그인 이후 이용 가능합니다');
+            isLoggedIn ? navigate('/my-posts') : toast('🥲 로그인 이후 이용 가능합니다');
          },
       },
       {
@@ -53,7 +52,7 @@ export default function TeamInfo({ data }: { data?: IMyTeam }) {
             </p>
          ),
          event: () => {
-            isLoggedIn ? setOpenBottomSheet(true) : setIsToastShow(true, '🥲 로그인 이후 이용 가능합니다');
+            isLoggedIn ? setOpenBottomSheet(true) : toast('🥲 로그인 이후 이용 가능합니다');
          },
       },
    ];

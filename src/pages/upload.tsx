@@ -18,7 +18,6 @@ import { AxiosError } from 'axios';
 import { useNavigate } from 'react-router-dom';
 import imageCompression from 'browser-image-compression';
 import { useBottomSheet } from '../hooks/useBottomSheet';
-import { useToastStore } from '../stores/toast-stores';
 import { ToastContainer, toast } from 'react-toastify';
 
 interface IUpload {
@@ -49,7 +48,6 @@ export default function Upload() {
    const navigate = useNavigate();
    const formData = new FormData();
    const { openSheet } = useBottomSheet();
-   const { setIsToastShow } = useToastStore();
 
    useEffect(() => {
       setUploadData((prev) => {
@@ -76,7 +74,7 @@ export default function Upload() {
          useWebWorker: true,
       };
       const compressedFilesTemp: File[] = [];
-      setIsToastShow(true, '⚒️ 이미지 압축 중...', false);
+      toast('⚒️ 이미지 압축 중...');
       files.forEach(async (f) => {
          setImages((prev) => {
             return [...prev, URL.createObjectURL(f)];
@@ -92,9 +90,10 @@ export default function Upload() {
    };
 
    useEffect(() => {
-      compressedFiles.length > 0 &&
-         compressedFiles.length === images.length + 1 &&
-         setIsToastShow(false, '', undefined);
+      if (images.length > 0 && compressedFiles.length === images.length + 1) {
+         toast('압축 완료!');
+         // toast.dismiss({ containerId: 'imageCompression', id: 'imageCompressionLoading' });
+      }
    }, [compressedFiles]);
 
    useEffect(() => {
@@ -137,30 +136,17 @@ export default function Upload() {
             .then(function () {
                navigate('/');
                setLoading(false);
-               setIsToastShow(true, '🎉 업로드 완료');
+               toast('🎉 업로드 완료');
             })
             .catch(function (error: AxiosError) {
                console.log(error);
             });
       } else {
-         setIsToastShow(true, '다시 시도해주세요');
+         toast('다시 시도해주세요');
       }
    };
    useEffect(() => {
-      loading &&
-         toast('🚀 업로드 중 ...', {
-            toastId: 'loading-toast',
-            autoClose: false,
-            position: 'bottom-center',
-            style: { marginBottom: '50px' },
-            hideProgressBar: true,
-            closeOnClick: true,
-            closeButton: false,
-            pauseOnHover: true,
-            draggable: true,
-            progress: undefined,
-            theme: 'dark',
-         });
+      loading && toast('🚀 업로드 중 ...');
    }, [loading]);
 
    useEffect(() => {
