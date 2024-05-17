@@ -3,9 +3,11 @@ import { useLayoutScrollStore } from '../stores/layout-scroll-stores';
 import { useNavStore } from '../stores/nav-stores';
 import { motion } from 'framer-motion';
 
-type LayoutProps = ComponentProps<'div'>;
+type LayoutProps = ComponentProps<'div'> & {
+   gap?: string;
+};
 
-export default function Layout({ children, className, ...props }: LayoutProps) {
+export default function Layout({ children, className, gap, ...props }: LayoutProps) {
    const { setIsNavVisible } = useNavStore();
    const [prevScroll, setPrevScroll] = useState(0);
    const { setIsScrollTop, isScrollTop } = useLayoutScrollStore();
@@ -32,7 +34,7 @@ export default function Layout({ children, className, ...props }: LayoutProps) {
          {...props}
       >
          <motion.div
-            className="w-full flex flex-col"
+            className={`w-full flex flex-col ${gap && `gap-${gap}`}`}
             variants={{
                hidden: { y: 10, opacity: 0 },
                enter: { opacity: 1, x: 0, y: 0 },

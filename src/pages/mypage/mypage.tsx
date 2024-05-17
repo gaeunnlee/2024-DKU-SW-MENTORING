@@ -63,7 +63,7 @@ export default function MyPage() {
    }, [userInfo]);
 
    return (
-      <Layout>
+      <Layout gap="2">
          <div className="flex items-center gap-3 w-full">
             <div className="w-[85px] flex justify-center text-[80px] text-[#ddd]">
                <FaUserCircle />
