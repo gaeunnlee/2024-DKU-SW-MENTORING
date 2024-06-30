@@ -1,8 +1,8 @@
 import React from 'react';
-import Layout from '../components/Layout';
-import Post from '../components/Post';
+import Layout from '../components/common/Layout';
+import Post from '../components/common/Post';
 import { IPost } from '../data/interface';
-import BoardLayout from '../components/BoardLayout';
+import BoardLayout from '../components/common/BoardLayout';
 
 export default function Index() {
    const Cell = ({ data }: { data: IPost }) => <Post key={data.id} data={data} />;

@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { IPost, IPostBoard } from '../../data/interface';
 import { useApi } from '../../hooks/useApi';
-import Layout from '../../components/Layout';
-import Post from '../../components/Post';
+import Post from '../../components/common/Post';
 import { useNavStore } from '../../stores/nav-stores';
+import Layout from '../../components/common/Layout';
 
 export default function UnapprovedPosts() {
    const [posts, setPosts] = useState<IPost[]>();

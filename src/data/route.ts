@@ -53,12 +53,12 @@ export const route = {
    'post-detail': {
       id: '상세',
       name: '상세',
-      pathname: '/post-detail/:id',
+      pathname: '/post/:id',
    },
-   'my-posts': {
+   posts: {
       id: '작성글',
       name: '작성글',
-      pathname: '/my-posts',
+      pathname: '/posts',
    },
    'unapproved-posts': {
       id: '미승인 글',
