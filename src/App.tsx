@@ -1,8 +1,8 @@
 import React, { useEffect } from 'react';
 import Router from './Router';
 import styled from 'styled-components';
-import ModalProvider from './components/Modal/ModalProvider';
-import BottomSheetProvider from './components/BottomSheet/BottomSheetProvider';
+import ModalProvider from './components/common/Modal/ModalProvider';
+import BottomSheetProvider from './components/common/BottomSheet/BottomSheetProvider';
 import 'react-toastify/dist/ReactToastify.css';
 import { Bounce, ToastContainer } from 'react-toastify';
 

@@ -1,18 +1,18 @@
 import React, { useState, ReactNode, useEffect } from 'react';
-import Layout from '../../components/Layout';
 import styled from 'styled-components';
 import { SwiperSlide } from 'swiper/react';
-import HorizontalScrollBox from '../../components/HorizontalScrollBox';
+import HorizontalScrollBox from '../../components/common/UI/HorizontalScrollBox';
 import { FaSearch } from 'react-icons/fa';
 import { IMission } from '../../data/interface';
-import Box from '../../components/ui/Box';
+import Box from '../../components/common/UI/Box';
 import { useSheetStore } from '../../stores/sheet-stores';
-import MissionDetail from './detail';
+import MissionDetail from '../../components/missions/MissionDetail';
 import { useModal } from '../../hooks/useModal';
 import { difficulty } from '../../data/enum';
-import BoardLayout from '../../components/BoardLayout';
 import { useDebounce } from '../../hooks/useDebounce';
 import { useLayoutScrollStore } from '../../stores/layout-scroll-stores';
+import BoardLayout from '../../components/common/BoardLayout';
+import Layout from '../../components/common/Layout';
 
 export default function Missions({
    selectMode,

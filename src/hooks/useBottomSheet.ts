@@ -1,5 +1,5 @@
 import React, { ReactNode, useContext } from 'react';
-import { SheetContext } from '../components/BottomSheet/BottomSheetProvider';
+import { SheetContext } from '../components/common/BottomSheet/BottomSheetProvider';
 import { useSheetStore } from '../stores/sheet-stores';
 
 export const useBottomSheet = () => {
